@@ -39,6 +39,10 @@ class ListenerProviderFactory
             return;
         }
 
+        /**
+         * @var string $eventName
+         * @var array $listeners
+         */
         foreach ($events as $eventName => $listeners) {
             foreach ($listeners as $listenerName) {
                 $eventListener = $isAsync
