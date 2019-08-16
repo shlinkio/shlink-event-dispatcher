@@ -16,10 +16,11 @@ class ListenerProviderFactory
     {
         $config = $container->has('config') ? $container->get('config') : [];
         $events = $config['events'] ?? [];
+        $fallbackAsyncToRegular = $events['fallback_async_to_regular'] ?? false;
         $provider = new AttachableListenerProvider();
 
-        $this->registerListeners($events['regular'] ?? [], $container, $provider);
-        $this->registerListeners($events['async'] ?? [], $container, $provider, true);
+        $this->registerListeners($events['regular'] ?? [], $container, $provider, false);
+        $this->registerListeners($events['async'] ?? [], $container, $provider, ! $fallbackAsyncToRegular);
 
         return $provider;
     }
@@ -28,7 +29,7 @@ class ListenerProviderFactory
         array $events,
         ContainerInterface $container,
         AttachableListenerProvider $provider,
-        bool $isAsync = false
+        bool $isAsync
     ): void {
         if (empty($events)) {
             return;
