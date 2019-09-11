@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 1.1.1 - 2019-09-11
+
+#### Added
+
+* *Nothing*
+
+#### Changed
+
+* *Nothing*
+
+#### Deprecated
+
+* *Nothing*
+
+#### Removed
+
+* *Nothing*
+
+#### Fixed
+
+* [#7](https://github.com/shlinkio/shlink-event-dispatcher/issues/7) Added support for [shlink-common](https://github.com/shlinkio/shlink-common) v2.0.0.
+
+
 ## 1.1.0 - 2019-08-16
 
 #### Added
