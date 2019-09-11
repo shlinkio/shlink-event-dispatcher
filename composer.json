@@ -14,7 +14,7 @@
     "require": {
         "php": "^7.2",
         "phly/phly-event-dispatcher": "^1.0",
-        "shlinkio/shlink-common": "^1.0"
+        "shlinkio/shlink-common": "^1.0 || ^2.0"
     },
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master",
@@ -49,9 +49,9 @@
         "cs:fix": "phpcbf",
         "stan": "phpstan analyse src config functions --level=6",
 
-        "test": "phpdbg -qrr vendor/bin/phpunit --order-by=random --testdox",
-        "test:ci": "phpdbg -qrr vendor/bin/phpunit --order-by=random --coverage-clover=build/clover.xml --coverage-xml=build/coverage-xml --log-junit=build/phpunit.junit.xml --testdox",
-        "test:pretty": "phpdbg -qrr vendor/bin/phpunit --order-by=random --coverage-html build/coverage-html --testdox",
+        "test": "phpdbg -qrr vendor/bin/phpunit --order-by=random --testdox --colors=always",
+        "test:ci": "phpdbg -qrr vendor/bin/phpunit --order-by=random --coverage-clover=build/clover.xml --coverage-xml=build/coverage-xml --log-junit=build/phpunit.junit.xml --testdox --colors=always",
+        "test:pretty": "phpdbg -qrr vendor/bin/phpunit --order-by=random --coverage-html build/coverage-html --testdox --colors=always",
 
         "infect": "infection --threads=4 --min-msi=95 --log-verbosity=default --only-covered",
         "infect:ci": "infection --threads=4 --min-msi=95 --log-verbosity=default --only-covered --coverage=build",
