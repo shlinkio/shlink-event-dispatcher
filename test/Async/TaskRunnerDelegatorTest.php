@@ -27,9 +27,7 @@ class TaskRunnerDelegatorTest extends TestCase
         $server
             ->expects($this->exactly(2))
             ->method('on');
-        $callback = function () use ($server) {
-            return $server;
-        };
+        $callback = fn () => $server;
 
         $container = $this->prophesize(ContainerInterface::class);
         $getTaskRunner = $container->get(TaskRunner::class)->willReturn($this->prophesize(TaskRunner::class)->reveal());
