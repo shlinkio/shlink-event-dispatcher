@@ -2,7 +2,7 @@
 
 This library provides a PSR-14 EventDispatcher which is capable of dispatching both regular listeners and async listeners which are executed using [swoole](https://www.swoole.co.uk/)'s task system.
 
-Most of the elements it provides require a [PSR-11](https://www.php-fig.org/psr/psr-11/) container, and it's easy to integrate on [expressive](https://github.com/zendframework/zend-expressive) applications thanks to the `ConfigProvider` it includes.
+Most of the elements it provides require a [PSR-11](https://www.php-fig.org/psr/psr-11/) container, and it's easy to integrate on [mezzio](https://github.com/mezzio/mezzio) applications thanks to the `ConfigProvider` it includes.
 
 [![Build Status](https://img.shields.io/travis/shlinkio/shlink-event-dispatcher.svg?style=flat-square)](https://travis-ci.org/shlinkio/shlink-event-dispatcher)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/shlinkio/shlink-event-dispatcher.svg?style=flat-square)](https://scrutinizer-ci.com/g/shlinkio/shlink-event-dispatcher/?branch=master)
