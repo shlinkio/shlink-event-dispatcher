@@ -16,8 +16,7 @@ use function Shlinkio\Shlink\EventDispatcher\asyncListener;
 
 class ListenerProviderFactoryTest extends TestCase
 {
-    /** @var ListenerProviderFactory */
-    private $factory;
+    private ListenerProviderFactory $factory;
 
     public function setUp(): void
     {

@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+
+#### Added
+
+* *Nothing*
+
+#### Changed
+
+* *Nothing*
+
+#### Deprecated
+
+* *Nothing*
+
+#### Removed
+
+* [#13](https://github.com/shlinkio/shlink-event-dispatcher/issues/13) Dropped support for PHP 7.2 and 7.3.
+
+#### Fixed
+
+* *Nothing*
+
+
 ## 1.2.0 - 2019-11-30
 
 #### Added

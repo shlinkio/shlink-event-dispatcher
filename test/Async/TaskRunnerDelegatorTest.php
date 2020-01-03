@@ -13,8 +13,7 @@ use Swoole\Http\Server as HttpServer;
 
 class TaskRunnerDelegatorTest extends TestCase
 {
-    /** @var TaskRunnerDelegator */
-    private $delegator;
+    private TaskRunnerDelegator $delegator;
 
     public function setUp(): void
     {
@@ -28,9 +27,7 @@ class TaskRunnerDelegatorTest extends TestCase
         $server
             ->expects($this->exactly(2))
             ->method('on');
-        $callback = function () use ($server) {
-            return $server;
-        };
+        $callback = fn () => $server;
 
         $container = $this->prophesize(ContainerInterface::class);
         $getTaskRunner = $container->get(TaskRunner::class)->willReturn($this->prophesize(TaskRunner::class)->reveal());

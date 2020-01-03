@@ -15,10 +15,8 @@ use function is_object;
 
 class TaskRunner
 {
-    /** @var LoggerInterface */
-    private $logger;
-    /** @var ContainerInterface */
-    private $container;
+    private LoggerInterface $logger;
+    private ContainerInterface $container;
 
     public function __construct(LoggerInterface $logger, ContainerInterface $container)
     {

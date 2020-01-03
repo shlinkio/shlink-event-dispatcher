@@ -16,16 +16,11 @@ use Swoole\Http\Server as HttpServer;
 
 class TaskRunnerTest extends TestCase
 {
-    /** @var TaskRunner */
-    private $taskRunner;
-    /** @var ObjectProphecy */
-    private $logger;
-    /** @var ObjectProphecy */
-    private $container;
-    /** @var HttpServer */
-    private $server;
-    /** @var ObjectProphecy */
-    private $task;
+    private TaskRunner $taskRunner;
+    private ObjectProphecy $logger;
+    private ObjectProphecy $container;
+    private HttpServer $server;
+    private ObjectProphecy $task;
 
     public function setUp(): void
     {

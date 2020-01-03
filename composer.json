@@ -12,9 +12,9 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.4",
         "phly/phly-event-dispatcher": "^1.0",
-        "shlinkio/shlink-common": "^2.4"
+        "shlinkio/shlink-common": "^2.5"
     },
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master",

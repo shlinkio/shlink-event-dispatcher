@@ -12,12 +12,9 @@ use Swoole\Http\Server as HttpServer;
 
 class AsyncEventListenerTest extends TestCase
 {
-    /** @var AsyncEventListener */
-    private $eventListener;
-    /** @var HttpServer */
-    private $server;
-    /** @var string */
-    private $regularListenerName;
+    private AsyncEventListener $eventListener;
+    private HttpServer $server;
+    private string $regularListenerName;
 
     public function setUp(): void
     {
