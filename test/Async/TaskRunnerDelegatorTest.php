@@ -32,7 +32,7 @@ class TaskRunnerDelegatorTest extends TestCase
         $container = $this->prophesize(ContainerInterface::class);
         $getTaskRunner = $container->get(TaskRunner::class)->willReturn($this->prophesize(TaskRunner::class)->reveal());
         $getLogger = $container->get(LoggerInterface::class)->willReturn(
-            $this->prophesize(LoggerInterface::class)->reveal()
+            $this->prophesize(LoggerInterface::class)->reveal(),
         );
 
         $result = ($this->delegator)($container->reveal(), '', $callback);

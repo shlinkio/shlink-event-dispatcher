@@ -63,7 +63,7 @@ class TaskRunnerTest extends TestCase
         ]);
         $logError = $this->logger->error(Argument::cetera());
         $taskToString = $this->task->toString()->willReturn('The task');
-        $taskRun = $this->task->run($this->container->reveal())->will(function () {
+        $taskRun = $this->task->run($this->container->reveal())->will(function (): void {
         });
 
         ($this->taskRunner)($this->server, 1, 1, $this->task->reveal());

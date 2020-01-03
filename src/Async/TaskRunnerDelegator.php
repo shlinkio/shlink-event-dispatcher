@@ -10,14 +10,14 @@ use Swoole\Http\Server as HttpServer;
 
 class TaskRunnerDelegator
 {
-    public function __invoke(ContainerInterface $container, $name, callable $callback): HttpServer
+    public function __invoke(ContainerInterface $container, string $name, callable $callback): HttpServer
     {
         /** @var HttpServer $server */
         $server = $callback();
         $logger = $container->get(LoggerInterface::class);
 
         $server->on('task', $container->get(TaskRunner::class));
-        $server->on('finish', function (HttpServer $server, int $taskId) use ($logger) {
+        $server->on('finish', function (HttpServer $server, int $taskId) use ($logger): void {
             $logger->notice('Task #{taskId} has finished processing', ['taskId' => $taskId]);
         });
 

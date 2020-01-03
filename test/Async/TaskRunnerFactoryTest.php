@@ -38,6 +38,9 @@ class TaskRunnerFactoryTest extends TestCase
         $getLogger->shouldHaveBeenCalledOnce();
     }
 
+    /**
+     * @return mixed
+     */
     private function getPropertyFromTaskRunner(TaskRunner $taskRunner, string $propertyName)
     {
         $ref = new ReflectionObject($taskRunner);

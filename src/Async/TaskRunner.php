@@ -24,6 +24,9 @@ class TaskRunner
         $this->container = $container;
     }
 
+    /**
+     * @param mixed $task
+     */
     public function __invoke(HttpServer $server, int $taskId, int $fromId, $task): void
     {
         if (! $task instanceof TaskInterface) {
