@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Shlinkio\Shlink\EventDispatcher;
 
+use Laminas\ServiceManager\Proxy\LazyServiceFactory;
 use Phly\EventDispatcher as Phly;
 use Psr\EventDispatcher as Psr;
-use Zend\ServiceManager\Proxy\LazyServiceFactory;
 
 return [
 
