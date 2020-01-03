@@ -32,7 +32,7 @@ class EventListenerTaskTest extends TestCase
     {
         $this->assertEquals(
             sprintf('Listener -> "%s", Event -> "%s"', $this->listenerName, get_class($this->event)),
-            $this->task->toString()
+            $this->task->toString(),
         );
     }
 
@@ -41,7 +41,7 @@ class EventListenerTaskTest extends TestCase
     {
         $invoked = false;
         $container = $this->prophesize(ContainerInterface::class);
-        $listener = function (object $event) use (&$invoked) {
+        $listener = function (object $event) use (&$invoked): void {
             $invoked = true;
             Assert::assertSame($event, $this->event);
         };

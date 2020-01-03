@@ -7,6 +7,7 @@ namespace ShlinkioTest\Shlink\EventDispatcher\Listener;
 use Phly\EventDispatcher\ListenerProvider\AttachableListenerProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\ListenerProviderInterface;
 use ReflectionObject;
 use Shlinkio\Shlink\EventDispatcher\Listener\ListenerProviderFactory;
 use Swoole\Http\Server as HttpServer;
@@ -175,6 +176,7 @@ class ListenerProviderFactoryTest extends TestCase
     }
 
     /**
+     * @param mixed $fallbackAsyncToRegular
      * @test
      * @dataProvider provideTruthyFallbackAsync
      */
@@ -226,7 +228,7 @@ class ListenerProviderFactoryTest extends TestCase
         return [[true], ['true'], ['something']];
     }
 
-    private function getListenersFromProvider($provider): array
+    private function getListenersFromProvider(ListenerProviderInterface $provider): array
     {
         $ref = new ReflectionObject($provider);
         $prop = $ref->getProperty('listeners');

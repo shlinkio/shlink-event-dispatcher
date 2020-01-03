@@ -6,6 +6,7 @@ namespace Shlinkio\Shlink\EventDispatcher\Listener;
 
 use Phly\EventDispatcher\ListenerProvider\AttachableListenerProvider;
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\ListenerProviderInterface;
 use Swoole\Http\Server as HttpServer;
 
 use function Phly\EventDispatcher\lazyListener;
@@ -13,7 +14,7 @@ use function Shlinkio\Shlink\EventDispatcher\asyncListener;
 
 class ListenerProviderFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): ListenerProviderInterface
     {
         $config = $container->has('config') ? $container->get('config') : [];
         $events = $config['events'] ?? [];
