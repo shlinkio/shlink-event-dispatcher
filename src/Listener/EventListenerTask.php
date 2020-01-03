@@ -12,10 +12,8 @@ use function sprintf;
 
 class EventListenerTask implements TaskInterface
 {
-    /** @var string */
-    private $listenerName;
-    /** @var object */
-    private $event;
+    private string $listenerName;
+    private object $event;
 
     public function __construct(string $listenerName, object $event)
     {

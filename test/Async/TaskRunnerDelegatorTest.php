@@ -13,8 +13,7 @@ use Swoole\Http\Server as HttpServer;
 
 class TaskRunnerDelegatorTest extends TestCase
 {
-    /** @var TaskRunnerDelegator */
-    private $delegator;
+    private TaskRunnerDelegator $delegator;
 
     public function setUp(): void
     {

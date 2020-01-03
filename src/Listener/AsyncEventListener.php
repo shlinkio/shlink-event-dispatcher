@@ -8,10 +8,8 @@ use Swoole\Http\Server as HttpServer;
 
 class AsyncEventListener
 {
-    /** @var string */
-    private $regularListenerName;
-    /** @var HttpServer */
-    private $server;
+    private string $regularListenerName;
+    private HttpServer $server;
 
     public function __construct(HttpServer $server, string $regularListenerName)
     {

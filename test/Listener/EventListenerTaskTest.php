@@ -15,12 +15,9 @@ use function sprintf;
 
 class EventListenerTaskTest extends TestCase
 {
-    /** @var EventListenerTask */
-    private $task;
-    /** @var object */
-    private $event;
-    /** @var string */
-    private $listenerName;
+    private EventListenerTask $task;
+    private object $event;
+    private string $listenerName;
 
     public function setUp(): void
     {

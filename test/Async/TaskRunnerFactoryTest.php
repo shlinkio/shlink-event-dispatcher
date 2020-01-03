@@ -13,8 +13,7 @@ use Shlinkio\Shlink\EventDispatcher\Async\TaskRunnerFactory;
 
 class TaskRunnerFactoryTest extends TestCase
 {
-    /** @var TaskRunnerFactory */
-    private $factory;
+    private TaskRunnerFactory $factory;
 
     public function setUp(): void
     {
