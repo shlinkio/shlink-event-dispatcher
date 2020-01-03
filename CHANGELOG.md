@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 
 #### Changed
 
-* *Nothing*
+* [#14](https://github.com/shlinkio/shlink-event-dispatcher/issues/14) Updated coding-standard (v2.1) and phpstan (v0.12) dependencies.
 
 #### Deprecated
 
