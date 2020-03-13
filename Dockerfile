@@ -1,6 +1,6 @@
-FROM prooph/composer:7.4
+FROM composer:1.10.0
 
-ENV SWOOLE_VERSION 4.4.12
+ENV SWOOLE_VERSION 4.4.15
 
 RUN apk add --no-cache openssl openssl-dev
 RUN apk add --no-cache libpng-dev libpng libjpeg-turbo-dev libwebp-dev zlib-dev libxpm-dev

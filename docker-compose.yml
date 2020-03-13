@@ -3,7 +3,6 @@ version: '3'
 services:
   shlink_event_dispatcher_php:
     container_name: shlink_event_dispatcher_php
-    entrypoint: ["/bin/sh", "-c"]
     build:
       context: .
     volumes:
