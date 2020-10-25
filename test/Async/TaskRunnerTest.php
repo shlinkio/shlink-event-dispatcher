@@ -7,6 +7,7 @@ namespace ShlinkioTest\Shlink\EventDispatcher\Async;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -16,6 +17,8 @@ use Swoole\Http\Server as HttpServer;
 
 class TaskRunnerTest extends TestCase
 {
+    use ProphecyTrait;
+
     private TaskRunner $taskRunner;
     private ObjectProphecy $logger;
     private ObjectProphecy $container;

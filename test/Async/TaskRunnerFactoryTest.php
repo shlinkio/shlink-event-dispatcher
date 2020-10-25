@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\Async;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionObject;
@@ -13,6 +14,8 @@ use Shlinkio\Shlink\EventDispatcher\Async\TaskRunnerFactory;
 
 class TaskRunnerFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     private TaskRunnerFactory $factory;
 
     public function setUp(): void

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\Async;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Shlinkio\Shlink\EventDispatcher\Async\TaskRunner;
@@ -13,6 +14,8 @@ use Swoole\Http\Server as HttpServer;
 
 class TaskRunnerDelegatorTest extends TestCase
 {
+    use ProphecyTrait;
+
     private TaskRunnerDelegator $delegator;
 
     public function setUp(): void
