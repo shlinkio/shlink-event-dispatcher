@@ -6,6 +6,7 @@ namespace ShlinkioTest\Shlink\EventDispatcher\Listener;
 
 use Phly\EventDispatcher\ListenerProvider\AttachableListenerProvider;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use ReflectionObject;
@@ -17,6 +18,8 @@ use function Shlinkio\Shlink\EventDispatcher\asyncListener;
 
 class ListenerProviderFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     private ListenerProviderFactory $factory;
 
     public function setUp(): void

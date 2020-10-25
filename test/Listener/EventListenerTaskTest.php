@@ -6,6 +6,7 @@ namespace ShlinkioTest\Shlink\EventDispatcher\Listener;
 
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Shlinkio\Shlink\EventDispatcher\Listener\EventListenerTask;
 use stdClass;
@@ -15,6 +16,8 @@ use function sprintf;
 
 class EventListenerTaskTest extends TestCase
 {
+    use ProphecyTrait;
+
     private EventListenerTask $task;
     private object $event;
     private string $listenerName;
