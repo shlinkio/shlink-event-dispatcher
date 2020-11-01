@@ -12,18 +12,18 @@
         }
     ],
     "require": {
-        "php": "^7.4",
+        "php": "^7.4 || 8.0",
         "phly/phly-event-dispatcher": "^1.0",
         "shlinkio/shlink-config": "^1.0"
     },
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master",
-        "infection/infection": "^0.16.1",
+        "infection/infection": "^0.19.2",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpstan/phpstan": "^0.12.3",
-        "phpunit/phpunit": "^9.0.2",
+        "phpstan/phpstan": "^0.12.52",
+        "phpunit/phpunit": "^9.4",
         "roave/security-advisories": "dev-master",
-        "shlinkio/php-coding-standard": "~2.1.0"
+        "shlinkio/php-coding-standard": "~2.1.1"
     },
     "autoload": {
         "psr-4": {

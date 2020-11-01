@@ -4,12 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
-## [Unreleased]
+## [1.5.0] - 2020-11-01
 ### Added
-* *Nothing*
+* Added explicit support for PHP 8
 
 ### Changed
-* [#21](https://github.com/shlinkio/shlink-event-dispatcher/issues/21) Updated `phpunit` to v9 and `infection` to v0.16.
+* [#21](https://github.com/shlinkio/shlink-event-dispatcher/issues/21) Updated `phpunit` to v9 and `infection` to v0.19.
 * Added PHP 8 to the build matrix, allowing failures on it.
 
 ### Deprecated

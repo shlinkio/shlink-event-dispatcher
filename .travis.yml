@@ -15,12 +15,8 @@ jobs:
   include:
     - name: "CI - 8.0"
       php: 'nightly'
-      env:
-        - COMPOSER_FLAGS='--ignore-platform-reqs'
     - name: "CI - 7.4"
       php: '7.4'
-      env:
-        - COMPOSER_FLAGS=''
 
 before_install:
   - yes | pecl install swoole
@@ -28,7 +24,7 @@ before_install:
 
 install:
   - composer self-update
-  - composer install --no-interaction --prefer-dist $COMPOSER_FLAGS
+  - composer install --no-interaction --prefer-dist
 
 script:
   - mkdir build
