@@ -40,7 +40,7 @@ class TaskRunnerDelegatorTest extends TestCase
 
         $result = ($this->delegator)($container->reveal(), '', $callback);
 
-        $this->assertSame($server, $result);
+        self::assertSame($server, $result);
         $getTaskRunner->shouldHaveBeenCalledOnce();
         $getLogger->shouldHaveBeenCalledOnce();
     }

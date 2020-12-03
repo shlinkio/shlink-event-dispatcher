@@ -13,12 +13,12 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
-        "phly/phly-event-dispatcher": "^1.0",
+        "league/event": "^3.0",
         "shlinkio/shlink-config": "^1.0"
     },
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master",
-        "infection/infection": "^0.19.2",
+        "infection/infection": "^0.20",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/phpstan": "^0.12.52",
         "phpunit/phpunit": "^9.4",

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Shlinkio\Shlink\EventDispatcher;
 
+use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 use Laminas\ServiceManager\Proxy\LazyServiceFactory;
-use Phly\EventDispatcher as Phly;
+use League\Event as League;
 use Psr\EventDispatcher as Psr;
 
 return [
@@ -17,11 +18,11 @@ return [
 
     'dependencies' => [
         'factories' => [
-            Phly\EventDispatcher::class => Phly\EventDispatcherFactory::class,
+            League\EventDispatcher::class => ConfigAbstractFactory::class,
             Psr\ListenerProviderInterface::class => Listener\ListenerProviderFactory::class,
         ],
         'aliases' => [
-            Psr\EventDispatcherInterface::class => Phly\EventDispatcher::class,
+            Psr\EventDispatcherInterface::class => League\EventDispatcher::class,
         ],
         'delegators' => [
             // The listener provider has to be lazy, because it uses the Swoole server to generate AsyncEventListeners
@@ -35,6 +36,10 @@ return [
                 Psr\ListenerProviderInterface::class => Psr\ListenerProviderInterface::class,
             ],
         ],
+    ],
+
+    ConfigAbstractFactory::class => [
+        League\EventDispatcher::class => [Psr\ListenerProviderInterface::class],
     ],
 
 ];

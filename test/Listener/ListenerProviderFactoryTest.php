@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Listener;
 
-use Phly\EventDispatcher\ListenerProvider\AttachableListenerProvider;
+use League\Event\PrioritizedListenerRegistry;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
@@ -13,8 +13,8 @@ use ReflectionObject;
 use Shlinkio\Shlink\EventDispatcher\Listener\ListenerProviderFactory;
 use Swoole\Http\Server as HttpServer;
 
-use function Phly\EventDispatcher\lazyListener;
 use function Shlinkio\Shlink\EventDispatcher\asyncListener;
+use function Shlinkio\Shlink\EventDispatcher\lazyListener;
 
 class ListenerProviderFactoryTest extends TestCase
 {
@@ -36,8 +36,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(AttachableListenerProvider::class, $provider);
-        $this->assertEmpty($listeners);
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEmpty($listeners);
     }
 
     public function provideContainersWithoutEvents(): iterable
@@ -82,8 +82,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(AttachableListenerProvider::class, $provider);
-        $this->assertEquals([
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEquals([
             'foo' => [
                 lazyListener($container, 'bar'),
                 lazyListener($container, 'baz'),
@@ -125,8 +125,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(AttachableListenerProvider::class, $provider);
-        $this->assertEquals([
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEquals([
             'foo' => [
                 asyncListener($server, 'bar'),
                 asyncListener($server, 'baz'),
@@ -169,8 +169,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(AttachableListenerProvider::class, $provider);
-        $this->assertEmpty($listeners);
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEmpty($listeners);
     }
 
     public function provideFalsyFallbackAsync(): iterable
@@ -212,8 +212,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(AttachableListenerProvider::class, $provider);
-        $this->assertEquals([
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEquals([
             'foo' => [
                 lazyListener($container, 'bar'),
                 lazyListener($container, 'baz'),
@@ -234,9 +234,16 @@ class ListenerProviderFactoryTest extends TestCase
     private function getListenersFromProvider(ListenerProviderInterface $provider): array
     {
         $ref = new ReflectionObject($provider);
-        $prop = $ref->getProperty('listeners');
+        $prop = $ref->getProperty('listenersPerEvent');
         $prop->setAccessible(true);
 
-        return $prop->getValue($provider);
+        $queues = $prop->getValue($provider);
+        $result = [];
+
+        foreach ($queues as $eventName => $queue) {
+            $result[$eventName] = $queue->getListeners();
+        }
+
+        return $result;
     }
 }
