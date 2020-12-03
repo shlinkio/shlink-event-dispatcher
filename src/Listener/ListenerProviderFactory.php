@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Shlinkio\Shlink\EventDispatcher\Listener;
 
-use Phly\EventDispatcher\ListenerProvider\AttachableListenerProvider;
+use League\Event\ListenerRegistry;
+use League\Event\PrioritizedListenerRegistry;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Swoole\Http\Server as HttpServer;
 
-use function Phly\EventDispatcher\lazyListener;
 use function Shlinkio\Shlink\EventDispatcher\asyncListener;
+use function Shlinkio\Shlink\EventDispatcher\lazyListener;
 
 class ListenerProviderFactory
 {
@@ -19,7 +20,7 @@ class ListenerProviderFactory
         $config = $container->has('config') ? $container->get('config') : [];
         $events = $config['events'] ?? [];
         $fallbackAsyncToRegular = $events['fallback_async_to_regular'] ?? false;
-        $provider = new AttachableListenerProvider();
+        $provider = new PrioritizedListenerRegistry();
 
         $this->registerListeners($events['regular'] ?? [], $container, $provider, false);
         $this->registerListeners($events['async'] ?? [], $container, $provider, ! $fallbackAsyncToRegular);
@@ -30,7 +31,7 @@ class ListenerProviderFactory
     private function registerListeners(
         array $events,
         ContainerInterface $container,
-        AttachableListenerProvider $provider,
+        ListenerRegistry $provider,
         bool $isAsync
     ): void {
         if (empty($events)) {
@@ -52,7 +53,7 @@ class ListenerProviderFactory
                     ? asyncListener($container->get(HttpServer::class), $listenerName)
                     : lazyListener($container, $listenerName);
 
-                $provider->listen($eventName, $eventListener);
+                $provider->subscribeTo($eventName, $eventListener);
             }
         }
     }
