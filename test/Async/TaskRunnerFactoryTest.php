@@ -36,8 +36,8 @@ class TaskRunnerFactoryTest extends TestCase
         $loggerProp = $this->getPropertyFromTaskRunner($taskRunner, 'logger');
         $containerProp = $this->getPropertyFromTaskRunner($taskRunner, 'container');
 
-        $this->assertSame($container, $containerProp);
-        $this->assertSame($logger, $loggerProp);
+        self::assertSame($container, $containerProp);
+        self::assertSame($logger, $loggerProp);
         $getLogger->shouldHaveBeenCalledOnce();
     }
 

@@ -33,7 +33,7 @@ class EventListenerTaskTest extends TestCase
     /** @test */
     public function toStringReturnsTheStringRepresentation(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             sprintf('Listener -> "%s", Event -> "%s"', $this->listenerName, get_class($this->event)),
             $this->task->toString(),
         );
@@ -53,7 +53,7 @@ class EventListenerTaskTest extends TestCase
 
         $this->task->run($container->reveal());
 
-        $this->assertTrue($invoked);
+        self::assertTrue($invoked);
         $getListener->shouldHaveBeenCalledOnce();
     }
 }

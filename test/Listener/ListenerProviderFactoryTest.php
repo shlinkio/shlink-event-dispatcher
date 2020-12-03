@@ -36,8 +36,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
-        $this->assertEmpty($listeners);
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEmpty($listeners);
     }
 
     public function provideContainersWithoutEvents(): iterable
@@ -82,8 +82,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
-        $this->assertEquals([
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEquals([
             'foo' => [
                 lazyListener($container, 'bar'),
                 lazyListener($container, 'baz'),
@@ -125,8 +125,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
-        $this->assertEquals([
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEquals([
             'foo' => [
                 asyncListener($server, 'bar'),
                 asyncListener($server, 'baz'),
@@ -169,8 +169,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
-        $this->assertEmpty($listeners);
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEmpty($listeners);
     }
 
     public function provideFalsyFallbackAsync(): iterable
@@ -212,8 +212,8 @@ class ListenerProviderFactoryTest extends TestCase
         $provider = ($this->factory)($container);
         $listeners = $this->getListenersFromProvider($provider);
 
-        $this->assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
-        $this->assertEquals([
+        self::assertInstanceOf(PrioritizedListenerRegistry::class, $provider);
+        self::assertEquals([
             'foo' => [
                 lazyListener($container, 'bar'),
                 lazyListener($container, 'baz'),
