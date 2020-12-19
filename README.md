@@ -4,9 +4,8 @@ This library provides a PSR-14 EventDispatcher which is capable of dispatching b
 
 Most of the elements it provides require a [PSR-11](https://www.php-fig.org/psr/psr-11/) container, and it's easy to integrate on [mezzio](https://github.com/mezzio/mezzio) applications thanks to the `ConfigProvider` it includes.
 
-[![Build Status](https://img.shields.io/travis/com/shlinkio/shlink-event-dispatcher.svg?style=flat-square)](https://travis-ci.com/shlinkio/shlink-event-dispatcher)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/shlinkio/shlink-event-dispatcher.svg?style=flat-square)](https://scrutinizer-ci.com/g/shlinkio/shlink-event-dispatcher/?branch=main)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/shlinkio/shlink-event-dispatcher.svg?style=flat-square)](https://scrutinizer-ci.com/g/shlinkio/shlink-event-dispatcher/?branch=main)
+[![Build Status](https://img.shields.io/github/workflow/status/shlinkio/shlink-event-dispatcher/Continuous%20integration/main?logo=github&style=flat-square)](https://github.com/shlinkio/shlink-event-dispatcher/actions?query=workflow%3A%22Continuous+integration%22)
+[![Code Coverage](https://img.shields.io/codecov/c/gh/shlinkio/shlink-event-dispatcher/main?style=flat-square)](https://app.codecov.io/gh/shlinkio/shlink-event-dispatcher)
 [![Latest Stable Version](https://img.shields.io/github/release/shlinkio/shlink-event-dispatcher.svg?style=flat-square)](https://packagist.org/packages/shlinkio/shlink-event-dispatcher)
 [![License](https://img.shields.io/github/license/shlinkio/shlink-event-dispatcher.svg?style=flat-square)](https://github.com/shlinkio/shlink-event-dispatcher/blob/main/LICENSE)
 [![Paypal donate](https://img.shields.io/badge/Donate-paypal-blue.svg?style=flat-square&logo=paypal&colorA=aaaaaa)](https://slnk.to/donate)

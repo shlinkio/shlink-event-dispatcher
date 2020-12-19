@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+### Added
+* *Nothing*
+
+### Changed
+* Migrated build to Github Actions.
+
+### Deprecated
+* *Nothing*
+
+### Removed
+* *Nothing*
+
+### Fixed
+* *Nothing*
+
+
 ## [1.6.0] - 2020-12-03
 ### Added
 * [#27](https://github.com/shlinkio/shlink-event-dispatcher/issues/27) Replaced `phly/phly-event-dispatcher` dependency by `league/event`.
