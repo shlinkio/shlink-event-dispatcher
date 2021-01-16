@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
-        "league/event": "^3.0",
+        "mezzio/mezzio-swoole": "^3.1",
         "shlinkio/shlink-config": "^1.0"
     },
     "require-dev": {

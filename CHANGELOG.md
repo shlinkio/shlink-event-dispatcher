@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 * *Nothing*
 
 ### Changed
-* Migrated build to Github Actions.
+* [#31](https://github.com/shlinkio/shlink-event-dispatcher/issues/31) Migrated build to Github Actions.
 
 ### Deprecated
 * *Nothing*
