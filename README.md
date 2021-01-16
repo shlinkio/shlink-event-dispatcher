@@ -1,13 +1,5 @@
 # Shlink Event Dispatcher
 
----
-
-## Package abandoned.
-
-Starting with v3, `mezzio/mezzio-swoole` natively supports all the functionalities provided by this mezzio module. See https://docs.mezzio.dev/mezzio-swoole/v3/async-tasks/#dispatching-a-servicebasedtask-via-a-psr-14-event-dispatcher
-
----
-
 This library provides a PSR-14 EventDispatcher which is capable of dispatching both regular listeners and async listeners which are executed using [swoole](https://www.swoole.co.uk/)'s task system.
 
 Most of the elements it provides require a [PSR-11](https://www.php-fig.org/psr/psr-11/) container, and it's easy to integrate on [mezzio](https://github.com/mezzio/mezzio) applications thanks to the `ConfigProvider` it includes.
