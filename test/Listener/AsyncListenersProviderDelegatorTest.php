@@ -49,6 +49,7 @@ class AsyncListenersProviderDelegatorTest extends TestCase
         yield 'empty config' => [
             [],
             static function (SwooleListenerProvider $provider, ObjectProphecy $container): void {
+                /** @var ServiceManager|ObjectProphecy $container */
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
                 $container->addDelegator(Argument::cetera())->shouldNotHaveBeenCalled();
             },
@@ -56,6 +57,7 @@ class AsyncListenersProviderDelegatorTest extends TestCase
         yield 'empty events' => [
             ['events' => []],
             static function (SwooleListenerProvider $provider, ObjectProphecy $container): void {
+                /** @var ServiceManager|ObjectProphecy $container */
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
                 $container->addDelegator(Argument::cetera())->shouldNotHaveBeenCalled();
             },
@@ -70,6 +72,7 @@ class AsyncListenersProviderDelegatorTest extends TestCase
                 ],
             ]],
             static function (SwooleListenerProvider $provider, ObjectProphecy $container): void {
+                /** @var ServiceManager|ObjectProphecy $container */
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
                 $container->addDelegator(Argument::cetera())->shouldNotHaveBeenCalled();
             },
@@ -84,6 +87,7 @@ class AsyncListenersProviderDelegatorTest extends TestCase
                 ],
             ]],
             static function (SwooleListenerProvider $provider, ObjectProphecy $container): void {
+                /** @var ServiceManager|ObjectProphecy $container */
                 Assert::assertCount(2, iterator_to_array($provider->getListenersForEvent(new stdClass())));
                 $container->addDelegator('foo', DeferredServiceListenerDelegator::class)->shouldHaveBeenCalledOnce();
                 $container->addDelegator('bar', DeferredServiceListenerDelegator::class)->shouldHaveBeenCalledOnce();

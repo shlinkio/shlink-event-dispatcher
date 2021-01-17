@@ -13,9 +13,6 @@ use function Shlinkio\Shlink\EventDispatcher\lazyListener;
 
 class AsyncListenersProviderDelegator
 {
-    /**
-     * @param ContainerInterface|ServiceManager $container
-     */
     public function __invoke(ContainerInterface $container, string $s, callable $factory): SwooleListenerProvider
     {
         /** @var SwooleListenerProvider $provider */
@@ -26,6 +23,7 @@ class AsyncListenersProviderDelegator
         foreach ($asyncEvents as $eventName => $listeners) {
             foreach ($listeners as $listenerName) {
                 $provider->addListener($eventName, lazyListener($container, $listenerName));
+                /** @var ServiceManager $container */
                 $container->addDelegator($listenerName, DeferredServiceListenerDelegator::class);
             }
         }
