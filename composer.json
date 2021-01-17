@@ -2,7 +2,7 @@
     "name": "shlinkio/shlink-event-dispatcher",
     "type": "library",
     "homepage": "https://shlink.io",
-    "description": "PSR-14 EventDispatcher which is capable of dispatching both regular and async listeners.",
+    "description": "Simplifies registering async and regular PSR-14 event listeners while using mezzio-swoole.",
     "license": "MIT",
     "authors": [
         {
