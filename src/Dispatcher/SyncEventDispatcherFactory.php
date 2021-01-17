@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shlinkio\Shlink\EventDispatcher\EventDispatcher;
+namespace Shlinkio\Shlink\EventDispatcher\Dispatcher;
 
 use Mezzio\Swoole\Event\EventDispatcher as SwooleEventDispatcher;
 use Mezzio\Swoole\Event\SwooleListenerProvider;
@@ -12,7 +12,7 @@ use function Shlinkio\Shlink\EventDispatcher\lazyListener;
 
 class SyncEventDispatcherFactory
 {
-    public const SYNC_EVENT_DISPATCHER = 'Shlinkio\Shlink\EventDispatcher\EventDispatcher\SyncEventDispatcher';
+    public const SYNC_EVENT_DISPATCHER = __NAMESPACE__ . '\SyncEventDispatcher';
 
     public function __invoke(ContainerInterface $container): SwooleEventDispatcher
     {
@@ -21,7 +21,6 @@ class SyncEventDispatcherFactory
         $fallback = $eventsConfig['fallback_async_to_regular'] ?? false;
 
         $this->registerEvents($provider, $container, $eventsConfig['regular'] ?? []);
-
         if ($fallback) {
             $this->registerEvents($provider, $container, $eventsConfig['async'] ?? []);
         }

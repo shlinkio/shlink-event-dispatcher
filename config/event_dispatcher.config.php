@@ -22,14 +22,14 @@ return [
     'dependencies' => [
         'factories' => [
             Listener\TaskFinishListener::class => ConfigAbstractFactory::class,
-            EventDispatcher\SyncEventDispatcherFactory::SYNC_EVENT_DISPATCHER =>
-                EventDispatcher\SyncEventDispatcherFactory::class,
+            Dispatcher\SyncEventDispatcherFactory::SYNC_EVENT_DISPATCHER =>
+                Dispatcher\SyncEventDispatcherFactory::class,
         ],
         'aliases' => [
             Psr\EventDispatcherInterface::class => SwooleEventDispatcherInterface::class,
         ],
         'delegators' => [
-            EventDispatcher\SyncEventDispatcherFactory::SYNC_EVENT_DISPATCHER => [
+            Dispatcher\SyncEventDispatcherFactory::SYNC_EVENT_DISPATCHER => [
                 LazyServiceFactory::class,
             ],
             SwooleListenerProvider::class => [
@@ -38,7 +38,7 @@ return [
         ],
         'lazy_services' => [
             'class_map' => [
-                EventDispatcher\SyncEventDispatcherFactory::SYNC_EVENT_DISPATCHER =>
+                Dispatcher\SyncEventDispatcherFactory::SYNC_EVENT_DISPATCHER =>
                     Psr\EventDispatcherInterface::class,
             ],
         ],
