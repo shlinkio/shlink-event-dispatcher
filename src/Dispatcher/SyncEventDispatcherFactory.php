@@ -12,7 +12,7 @@ use function Shlinkio\Shlink\EventDispatcher\lazyListener;
 
 class SyncEventDispatcherFactory
 {
-    public const SYNC_EVENT_DISPATCHER = __NAMESPACE__ . '\SyncEventDispatcher';
+    public const SYNC_DISPATCHER = __NAMESPACE__ . '\SyncEventDispatcher';
 
     public function __invoke(ContainerInterface $container): SwooleEventDispatcher
     {

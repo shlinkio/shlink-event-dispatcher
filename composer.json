@@ -14,6 +14,8 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "mezzio/mezzio-swoole": "^3.1",
+        "psr/event-dispatcher": "^1.0",
+        "psr/log": "^1.1",
         "shlinkio/shlink-config": "^1.0"
     },
     "require-dev": {

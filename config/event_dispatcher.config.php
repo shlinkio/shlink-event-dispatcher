@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Shlinkio\Shlink\EventDispatcher;
 
 use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
-use Laminas\ServiceManager\Proxy\LazyServiceFactory;
-use Mezzio\Swoole\Event\EventDispatcherInterface as SwooleEventDispatcherInterface;
 use Mezzio\Swoole\Event\SwooleListenerProvider;
 use Psr\EventDispatcher as Psr;
 use Psr\Log\LoggerInterface;
@@ -22,24 +20,17 @@ return [
     'dependencies' => [
         'factories' => [
             Listener\TaskFinishListener::class => ConfigAbstractFactory::class,
-            Dispatcher\SyncEventDispatcherFactory::SYNC_EVENT_DISPATCHER =>
-                Dispatcher\SyncEventDispatcherFactory::class,
+            Dispatcher\SyncEventDispatcherFactory::SYNC_DISPATCHER => Dispatcher\SyncEventDispatcherFactory::class,
+            Dispatcher\EventDispatcherAggregate::class => Dispatcher\EventDispatcherAggregateFactory::class,
         ],
+
         'aliases' => [
-            Psr\EventDispatcherInterface::class => SwooleEventDispatcherInterface::class,
+            Psr\EventDispatcherInterface::class => Dispatcher\EventDispatcherAggregate::class,
         ],
+
         'delegators' => [
-            Dispatcher\SyncEventDispatcherFactory::SYNC_EVENT_DISPATCHER => [
-                LazyServiceFactory::class,
-            ],
             SwooleListenerProvider::class => [
                 AsyncListenersProviderDelegator::class,
-            ],
-        ],
-        'lazy_services' => [
-            'class_map' => [
-                Dispatcher\SyncEventDispatcherFactory::SYNC_EVENT_DISPATCHER =>
-                    Psr\EventDispatcherInterface::class,
             ],
         ],
     ],
