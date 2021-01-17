@@ -65,5 +65,25 @@ class EventDispatcherAggregateTest extends TestCase
             0,
             1,
         ];
+        yield 'async events with falsy fallback' => [
+            [
+                'async' => [
+                    stdClass::class => [],
+                ],
+                'fallback_async_to_regular' => 0,
+            ],
+            1,
+            0,
+        ];
+        yield 'async events with truthy fallback' => [
+            [
+                'async' => [
+                    stdClass::class => [],
+                ],
+                'fallback_async_to_regular' => 'true',
+            ],
+            0,
+            1,
+        ];
     }
 }
