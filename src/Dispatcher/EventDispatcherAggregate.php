@@ -6,14 +6,16 @@ namespace Shlinkio\Shlink\EventDispatcher\Dispatcher;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 
-use function array_key_exists;
+use function array_keys;
 use function get_class;
+use function in_array;
 
 class EventDispatcherAggregate implements EventDispatcherInterface
 {
     private EventDispatcherInterface $asyncDispatcher;
     private EventDispatcherInterface $regularDispatcher;
-    private array $eventsConfig;
+    private array $asyncEvents;
+    private bool $fallbackAsync;
 
     public function __construct(
         EventDispatcherInterface $asyncDispatcher,
@@ -22,12 +24,13 @@ class EventDispatcherAggregate implements EventDispatcherInterface
     ) {
         $this->asyncDispatcher = $asyncDispatcher;
         $this->regularDispatcher = $regularDispatcher;
-        $this->eventsConfig = $eventsConfig;
+        $this->asyncEvents = array_keys($eventsConfig['async'] ?? []);
+        $this->fallbackAsync = (bool) ($eventsConfig['fallback_async_to_regular'] ?? false);
     }
 
     public function dispatch(object $event): object
     {
-        if (array_key_exists(get_class($event), $this->eventsConfig['async'] ?? [])) {
+        if (!$this->fallbackAsync && in_array(get_class($event), $this->asyncEvents, true)) {
             return $this->asyncDispatcher->dispatch($event);
         }
 
