@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Shlinkio\Shlink\EventDispatcher;
 
 use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
-use Laminas\ServiceManager\Proxy\LazyServiceFactory;
-use League\Event as League;
+use Mezzio\Swoole\Event\SwooleListenerProvider;
 use Psr\EventDispatcher as Psr;
+use Psr\Log\LoggerInterface;
+use Shlinkio\Shlink\EventDispatcher\Listener\AsyncListenersProviderDelegator;
 
 return [
 
@@ -18,28 +19,24 @@ return [
 
     'dependencies' => [
         'factories' => [
-            League\EventDispatcher::class => ConfigAbstractFactory::class,
-            Psr\ListenerProviderInterface::class => Listener\ListenerProviderFactory::class,
+            Listener\TaskFinishListener::class => ConfigAbstractFactory::class,
+            Dispatcher\SyncEventDispatcherFactory::SYNC_DISPATCHER => Dispatcher\SyncEventDispatcherFactory::class,
+            Dispatcher\EventDispatcherAggregate::class => Dispatcher\EventDispatcherAggregateFactory::class,
         ],
+
         'aliases' => [
-            Psr\EventDispatcherInterface::class => League\EventDispatcher::class,
+            Psr\EventDispatcherInterface::class => Dispatcher\EventDispatcherAggregate::class,
         ],
+
         'delegators' => [
-            // The listener provider has to be lazy, because it uses the Swoole server to generate AsyncEventListeners
-            // Without making this lazy, CLI commands which depend on the EventDispatcher fail
-            Psr\ListenerProviderInterface::class => [
-                LazyServiceFactory::class,
-            ],
-        ],
-        'lazy_services' => [
-            'class_map' => [
-                Psr\ListenerProviderInterface::class => Psr\ListenerProviderInterface::class,
+            SwooleListenerProvider::class => [
+                AsyncListenersProviderDelegator::class,
             ],
         ],
     ],
 
     ConfigAbstractFactory::class => [
-        League\EventDispatcher::class => [Psr\ListenerProviderInterface::class],
+        Listener\TaskFinishListener::class => [LoggerInterface::class],
     ],
 
 ];

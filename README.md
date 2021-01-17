@@ -1,6 +1,8 @@
 # Shlink Event Dispatcher
 
-This library provides a PSR-14 EventDispatcher which is capable of dispatching both regular listeners and async listeners which are executed using [swoole](https://www.swoole.co.uk/)'s task system.
+This library simplifies registering async and regular PSR-14 event listeners while using [`mezzio/mezzio-swoole`](https://docs.mezzio.dev/mezzio-swoole/). Async ones are executed using [swoole](https://www.swoole.co.uk/)'s task system.
+
+Internally, this library registers the events as explained in [mezzio's documentation](https://docs.mezzio.dev/mezzio-swoole/v3/async-tasks/#dispatching-a-servicebasedtask-via-a-psr-14-event-dispatcher), but taking care of the boilerplate code for you.
 
 Most of the elements it provides require a [PSR-11](https://www.php-fig.org/psr/psr-11/) container, and it's easy to integrate on [mezzio](https://github.com/mezzio/mezzio) applications thanks to the `ConfigProvider` it includes.
 
@@ -16,7 +18,7 @@ Install this library using composer:
 
     composer require shlinkio/shlink-event-dispatcher
 
-> This library is also an expressive module which provides its own `ConfigProvider`. Add it to your configuration to get everything automatically set up.
+> This library is also a mezzio module which provides its own `ConfigProvider`. Add it to your configuration to get everything automatically set up.
 
 ## Usage
 
