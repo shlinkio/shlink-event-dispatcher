@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
-use Mezzio\Swoole\Event\SwooleListenerProvider;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\ListenerProviderInterface;
 use ReflectionObject;
 use Shlinkio\Shlink\EventDispatcher\Dispatcher\SyncEventDispatcherFactory;
 use stdClass;
@@ -53,13 +53,13 @@ class SyncEventDispatcherFactoryTest extends TestCase
     {
         yield 'empty config' => [
             [],
-            static function (SwooleListenerProvider $provider): void {
+            static function (ListenerProviderInterface $provider): void {
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
             },
         ];
         yield 'empty events' => [
             ['events' => []],
-            static function (SwooleListenerProvider $provider): void {
+            static function (ListenerProviderInterface $provider): void {
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
             },
         ];
@@ -72,7 +72,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
                     ],
                 ],
             ]],
-            static function (SwooleListenerProvider $provider): void {
+            static function (ListenerProviderInterface $provider): void {
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
             },
         ];
@@ -85,7 +85,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
                     ],
                 ],
             ]],
-            static function (SwooleListenerProvider $provider): void {
+            static function (ListenerProviderInterface $provider): void {
                 Assert::assertCount(2, iterator_to_array($provider->getListenersForEvent(new stdClass())));
             },
         ];
@@ -105,7 +105,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
                     ],
                 ],
             ]],
-            static function (SwooleListenerProvider $provider): void {
+            static function (ListenerProviderInterface $provider): void {
                 Assert::assertCount(2, iterator_to_array($provider->getListenersForEvent(new stdClass())));
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new Event())));
             },
@@ -127,7 +127,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 ],
                 'fallback_async_to_regular' => true,
             ]],
-            static function (SwooleListenerProvider $provider): void {
+            static function (ListenerProviderInterface $provider): void {
                 Assert::assertCount(2, iterator_to_array($provider->getListenersForEvent(new stdClass())));
                 Assert::assertCount(3, iterator_to_array($provider->getListenersForEvent(new Event())));
             },
