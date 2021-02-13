@@ -28,6 +28,8 @@ Regular listeners are executed on the same process, blocking the dispatching of 
 
 If swoole is not installed, async listeners are ignored by default, but you can choose to make them to be registered as regular listeners instead.
 
+> **Important**: In order to be able to integrate with swoole tasks, you need to install `mezzio/mezzio-swoole:^3.1`.
+
 In order to register listeners you have to use a configuration like this:
 
 ```php
