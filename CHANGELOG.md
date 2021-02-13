@@ -22,6 +22,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 * *Nothing*
 
 
+## [2.1.0] - 2021-02-13
+### Added
+* [#33](https://github.com/shlinkio/shlink-event-dispatcher/issues/33) Decoupled from `mezzio/mezzio-swoole`.
+
+### Changed
+* *Nothing*
+
+### Deprecated
+* *Nothing*
+
+### Removed
+* *Nothing*
+
+### Fixed
+* *Nothing*
+
+
 ## [1.6.0] - 2020-12-03
 ### Added
 * [#27](https://github.com/shlinkio/shlink-event-dispatcher/issues/27) Replaced `phly/phly-event-dispatcher` dependency by `league/event`.
