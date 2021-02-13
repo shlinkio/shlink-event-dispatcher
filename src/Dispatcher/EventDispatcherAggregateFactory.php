@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Shlinkio\Shlink\EventDispatcher\Dispatcher;
 
-use Mezzio\Swoole\Event\EventDispatcher;
+use League\Event\EventDispatcher;
 use Mezzio\Swoole\Event\EventDispatcherInterface as SwooleEventDispatcherInterface;
-use Mezzio\Swoole\Event\SwooleListenerProvider;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -24,7 +23,7 @@ class EventDispatcherAggregateFactory
     private function resolveAsyncDispatcher(ContainerInterface $container): EventDispatcherInterface
     {
         if (! $container->has(SwooleEventDispatcherInterface::class)) {
-            return new EventDispatcher(new SwooleListenerProvider());
+            return new EventDispatcher();
         }
 
         return $container->get(SwooleEventDispatcherInterface::class);

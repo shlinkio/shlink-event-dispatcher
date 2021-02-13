@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Shlinkio\Shlink\EventDispatcher\Dispatcher;
 
-use Mezzio\Swoole\Event\EventDispatcher as SwooleEventDispatcher;
-use Mezzio\Swoole\Event\SwooleListenerProvider;
+use League\Event\EventDispatcher;
+use League\Event\PrioritizedListenerRegistry;
 use Psr\Container\ContainerInterface;
 
 use function Shlinkio\Shlink\EventDispatcher\lazyListener;
@@ -14,9 +14,9 @@ class SyncEventDispatcherFactory
 {
     public const SYNC_DISPATCHER = __NAMESPACE__ . '\SyncEventDispatcher';
 
-    public function __invoke(ContainerInterface $container): SwooleEventDispatcher
+    public function __invoke(ContainerInterface $container): EventDispatcher
     {
-        $provider = new SwooleListenerProvider();
+        $provider = new PrioritizedListenerRegistry();
         $eventsConfig = $container->get('config')['events'] ?? [];
         $fallback = $eventsConfig['fallback_async_to_regular'] ?? false;
 
@@ -25,17 +25,17 @@ class SyncEventDispatcherFactory
             $this->registerEvents($provider, $container, $eventsConfig['async'] ?? []);
         }
 
-        return new SwooleEventDispatcher($provider);
+        return new EventDispatcher($provider);
     }
 
     private function registerEvents(
-        SwooleListenerProvider $provider,
+        PrioritizedListenerRegistry $provider,
         ContainerInterface $container,
         array $events
     ): void {
         foreach ($events as $eventName => $listeners) {
             foreach ($listeners as $listener) {
-                $provider->addListener($eventName, lazyListener($container, $listener));
+                $provider->subscribeTo($eventName, lazyListener($container, $listener));
             }
         }
     }

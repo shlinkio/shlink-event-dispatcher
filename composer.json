@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
-        "mezzio/mezzio-swoole": "^3.1",
+        "league/event": "^3.0",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^1.1",
         "shlinkio/shlink-config": "^1.0"
@@ -21,11 +21,15 @@
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master",
         "infection/infection": "^0.20",
+        "mezzio/mezzio-swoole": "^3.1",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/phpstan": "^0.12.52",
         "phpunit/phpunit": "^9.4",
         "roave/security-advisories": "dev-master",
         "shlinkio/php-coding-standard": "~2.1.1"
+    },
+    "suggest": {
+        "mezzio/mezzio-swoole": "To be able to run async event dispatchers as swoole tasks"
     },
     "autoload": {
         "psr-4": {
