@@ -12,18 +12,14 @@ use function in_array;
 
 class EventDispatcherAggregate implements EventDispatcherInterface
 {
-    private EventDispatcherInterface $asyncDispatcher;
-    private EventDispatcherInterface $regularDispatcher;
     private array $asyncEvents;
     private bool $fallbackAsync;
 
     public function __construct(
-        EventDispatcherInterface $asyncDispatcher,
-        EventDispatcherInterface $regularDispatcher,
+        private EventDispatcherInterface $asyncDispatcher,
+        private EventDispatcherInterface $regularDispatcher,
         array $eventsConfig
     ) {
-        $this->asyncDispatcher = $asyncDispatcher;
-        $this->regularDispatcher = $regularDispatcher;
         $this->asyncEvents = array_keys($eventsConfig['async'] ?? []);
         $this->fallbackAsync = (bool) ($eventsConfig['fallback_async_to_regular'] ?? false);
     }

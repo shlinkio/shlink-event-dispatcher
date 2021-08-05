@@ -9,11 +9,8 @@ use Psr\Log\LoggerInterface;
 
 class TaskFinishListener
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger)
     {
-        $this->logger = $logger;
     }
 
     public function __invoke(TaskFinishEvent $event): void

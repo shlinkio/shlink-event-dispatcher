@@ -12,19 +12,19 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.0",
         "league/event": "^3.0",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^1.1",
-        "shlinkio/shlink-config": "^1.0"
+        "shlinkio/shlink-config": "^1.2"
     },
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master",
-        "infection/infection": "^0.20",
+        "infection/infection": "^0.24",
         "mezzio/mezzio-swoole": "^3.1",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpstan/phpstan": "^0.12.52",
-        "phpunit/phpunit": "^9.4",
+        "phpstan/phpstan": "^0.12.94",
+        "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-master",
         "shlinkio/php-coding-standard": "~2.1.1"
     },
@@ -53,11 +53,11 @@
         ],
         "cs": "phpcs",
         "cs:fix": "phpcbf",
-        "stan": "phpstan analyse src config functions --level=7",
+        "stan": "phpstan analyse src config functions --level=8",
         "test": "phpdbg -qrr vendor/bin/phpunit --order-by=random --testdox --colors=always",
         "test:ci": "@test --coverage-clover=build/clover.xml --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
         "test:pretty": "@test --coverage-html build/coverage-html",
-        "infect": "infection --threads=4 --min-msi=95 --log-verbosity=default --only-covered",
+        "infect": "infection --threads=4 --min-msi=95 --log-verbosity=default --only-covered --only-covering-test-cases",
         "infect:ci": "@infect --coverage=build --skip-initial-tests",
         "infect:show": "@infect --show-mutations",
         "infect:show:ci": "@infect --show-mutations --coverage=build --skip-initial-tests",
