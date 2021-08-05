@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: ['7.4']
+        php-version: ['8.0']
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: ['7.4']
+        php-version: ['8.0']
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -47,7 +47,8 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: ['7.4', '8.0']
+        php-version: ['8.0', '8.1']
+    continue-on-error: ${{ matrix.php-version == '8.1' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -58,9 +59,9 @@ jobs:
           tools: composer
           extensions: swoole
           coverage: none
-      - if: ${{ matrix.php-version == '8.0' }}
+      - if: ${{ matrix.php-version == '8.1' }}
         run: composer install --no-interaction --prefer-dist --ignore-platform-req=php
-      - if: ${{ matrix.php-version != '8.0' }}
+      - if: ${{ matrix.php-version != '8.1' }}
         run: composer install --no-interaction --prefer-dist
       - run: composer test:ci
       - uses: actions/upload-artifact@v2
@@ -74,7 +75,8 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: ['7.4', '8.0']
+        php-version: ['8.0', '8.1']
+    continue-on-error: ${{ matrix.php-version == '8.1' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -85,9 +87,9 @@ jobs:
           tools: composer
           extensions: swoole
           coverage: none
-      - if: ${{ matrix.php-version == '8.0' }}
+      - if: ${{ matrix.php-version == '8.1' }}
         run: composer install --no-interaction --prefer-dist --ignore-platform-req=php
-      - if: ${{ matrix.php-version != '8.0' }}
+      - if: ${{ matrix.php-version != '8.1' }}
         run: composer install --no-interaction --prefer-dist
       - uses: actions/download-artifact@v2
         with:
@@ -101,7 +103,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: ['7.4']
+        php-version: ['8.0']
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -126,7 +128,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: ['7.4', '8.0']
+        php-version: ['8.0', '8.1']
     steps:
       - uses: geekyeggo/delete-artifact@v1
         with:

@@ -1,6 +1,6 @@
 FROM composer:2
 
-ENV SWOOLE_VERSION 4.5.5
+ENV SWOOLE_VERSION 4.7.0
 
 RUN apk add --no-cache openssl openssl-dev
 RUN apk add --no-cache libpng-dev libpng libjpeg-turbo-dev libwebp-dev zlib-dev libxpm-dev
