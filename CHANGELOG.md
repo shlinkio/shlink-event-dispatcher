@@ -4,19 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
-## [2.0.0] - 2021-01-17
+## [Unreleased]
 ### Added
-* [#30](https://github.com/shlinkio/shlink-event-dispatcher/issues/30) Added support for `mezzio/mezzio-swoole` v3.x.
+* *Nothing*
 
 ### Changed
-* [#1](https://github.com/shlinkio/shlink-event-dispatcher/issues/1) Decoupled project from one specific psr-14 implementation.
-* [#31](https://github.com/shlinkio/shlink-event-dispatcher/issues/31) Migrated build to Github Actions.
+* Added experimental builds under PHP 8.1
+* Increased required phpstan level to 8
 
 ### Deprecated
 * *Nothing*
 
 ### Removed
-* *Nothing*
+* Dropped support for PHP 7.4
 
 ### Fixed
 * *Nothing*
@@ -28,6 +28,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 
 ### Changed
 * *Nothing*
+
+### Deprecated
+* *Nothing*
+
+### Removed
+* *Nothing*
+
+### Fixed
+* *Nothing*
+
+
+## [2.0.0] - 2021-01-17
+### Added
+* [#30](https://github.com/shlinkio/shlink-event-dispatcher/issues/30) Added support for `mezzio/mezzio-swoole` v3.x.
+
+### Changed
+* [#1](https://github.com/shlinkio/shlink-event-dispatcher/issues/1) Decoupled project from one specific psr-14 implementation.
+* [#31](https://github.com/shlinkio/shlink-event-dispatcher/issues/31) Migrated build to Github Actions.
 
 ### Deprecated
 * *Nothing*
