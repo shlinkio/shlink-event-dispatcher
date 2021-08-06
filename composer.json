@@ -26,7 +26,7 @@
         "phpstan/phpstan": "^0.12.94",
         "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-master",
-        "shlinkio/php-coding-standard": "~2.1.1"
+        "shlinkio/php-coding-standard": "~2.2.0"
     },
     "suggest": {
         "mezzio/mezzio-swoole": "To be able to run async event dispatchers as swoole tasks"

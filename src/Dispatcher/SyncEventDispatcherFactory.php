@@ -31,7 +31,7 @@ class SyncEventDispatcherFactory
     private function registerEvents(
         PrioritizedListenerRegistry $provider,
         ContainerInterface $container,
-        array $events
+        array $events,
     ): void {
         foreach ($events as $eventName => $listeners) {
             foreach ($listeners as $listener) {
