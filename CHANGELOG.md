@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 ### Changed
 * Added experimental builds under PHP 8.1
 * Increased required phpstan level to 8
+* Moved ci workflow to external repo and reused
 
 ### Deprecated
 * *Nothing*
