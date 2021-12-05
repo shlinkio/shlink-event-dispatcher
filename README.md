@@ -25,11 +25,11 @@ Install this library using composer:
 
 This module allows to register both regular and asynchronous event listeners on a PSR-14 EventDispatcher.
 
-Regular listeners are executed on the same process, blocking the dispatching of the HTTP request, while asynchronous listeners are delegated to a swoole background task, making the request to resolve immediately.
+Regular listeners are executed on the same process, blocking the dispatching of the HTTP request, while asynchronous listeners are delegated to a swoole/openswoole background task, making the request to resolve immediately.
 
-If swoole is not installed, async listeners are ignored by default, but you can choose to make them to be registered as regular listeners instead.
+If swoole/openswoole is not installed, async listeners are ignored by default, but you can choose to make them to be registered as regular listeners instead.
 
-> **Important**: In order to be able to integrate with swoole tasks, you need to install `mezzio/mezzio-swoole:^3.1`.
+> **Important**: In order to be able to integrate with swoole/openswoole tasks, you need to install `mezzio/mezzio-swoole:^3.3`.
 
 In order to register listeners you have to use a configuration like this:
 
@@ -67,7 +67,7 @@ return [
 The `events` config entry has these blocks.
 
 * `regular`: A list of events with all the listeners tha should be dispatched synchronously for each one of them.
-* `async`: A list of events with all the listeners tha should be executed as swoole tasks for each one of them.
-* `fallback_async_to_regular`: Tells if async event listeners should be dispatched as regular ones in case swoole is not installed. It is false by default.
+* `async`: A list of events with all the listeners that should be executed as swoole/openswoole tasks for each one of them.
+* `fallback_async_to_regular`: Tells if async event listeners should be dispatched as regular ones in case neither swoole nor openswoole are not installed. It is false by default.
 
 In both cases, listeners are identified by their service name, making the services to be lazily resolved only when their corresponding event gets dispatched.

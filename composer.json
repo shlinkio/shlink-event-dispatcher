@@ -21,7 +21,7 @@
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master",
         "infection/infection": "^0.25",
-        "mezzio/mezzio-swoole": "^3.3",
+        "mezzio/mezzio-swoole": "^3.5",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/phpstan": "^1.0",
         "phpunit/phpunit": "^9.5",
