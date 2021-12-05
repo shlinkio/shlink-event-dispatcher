@@ -11,3 +11,5 @@ jobs:
     uses: shlinkio/github-actions/.github/workflows/php-lib-ci.yml@main
     with:
       extra-extensions: swoole
+    secrets:
+      INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}
