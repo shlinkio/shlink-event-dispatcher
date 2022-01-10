@@ -9,8 +9,8 @@
         "text": "build/infection/infection-log.txt",
         "summary": "build/infection/summary-log.txt",
         "debug": "build/infection/debug-log.txt",
-        "badge": {
-            "branch": "main"
+        "stryker": {
+            "badge": "main"
         }
     },
     "tmpDir": "build/infection/temp",
