@@ -7,6 +7,7 @@
     "timeout": 5,
     "logs": {
         "text": "build/infection/infection-log.txt",
+        "html": "build/infection/infection-log.html",
         "summary": "build/infection/summary-log.txt",
         "debug": "build/infection/debug-log.txt",
         "stryker": {
