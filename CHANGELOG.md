@@ -4,12 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
-## [Unreleased]
+## [2.4.0] - 2022-06-03
 ### Added
 * *Nothing*
 
 ### Changed
-* *Nothing*
+* Updated dependencies
 
 ### Changed
 * Updated to infection 0.26, enabling HTML reports.
@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 * *Nothing*
 
 ### Removed
-* *Nothing*
+* Dropped support for PHP 8.0
 
 ### Fixed
 * *Nothing*
