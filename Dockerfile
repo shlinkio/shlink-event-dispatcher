@@ -1,6 +1,6 @@
 FROM composer:2
 
-ENV OPENSWOOLE_VERSION 4.8.1
+ENV OPENSWOOLE_VERSION 4.11.1
 
 RUN apk add --no-cache openssl openssl-dev
 RUN apk add --no-cache libpng-dev libpng libjpeg-turbo-dev libwebp-dev zlib-dev libxpm-dev
