@@ -16,17 +16,17 @@
         "league/event": "^3.0",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^3.0",
-        "shlinkio/shlink-config": "^1.6"
+        "shlinkio/shlink-config": "^2.0"
     },
     "require-dev": {
-        "eaglewu/swoole-ide-helper": "dev-master",
         "infection/infection": "^0.26",
         "mezzio/mezzio-swoole": "^4.2",
+        "openswoole/ide-helper": "~4.11.1",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpstan/phpstan": "^1.7",
+        "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-master",
-        "shlinkio/php-coding-standard": "~2.2.0"
+        "shlinkio/php-coding-standard": "~2.3.0"
     },
     "suggest": {
         "mezzio/mezzio-swoole": "To be able to run async event dispatchers as swoole tasks"

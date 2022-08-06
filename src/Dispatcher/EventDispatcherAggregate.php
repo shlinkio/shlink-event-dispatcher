@@ -16,8 +16,8 @@ class EventDispatcherAggregate implements EventDispatcherInterface
     private bool $fallbackAsync;
 
     public function __construct(
-        private EventDispatcherInterface $asyncDispatcher,
-        private EventDispatcherInterface $regularDispatcher,
+        private readonly EventDispatcherInterface $asyncDispatcher,
+        private readonly EventDispatcherInterface $regularDispatcher,
         array $eventsConfig,
     ) {
         $this->asyncEvents = array_keys($eventsConfig['async'] ?? []);
