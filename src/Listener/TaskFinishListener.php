@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 
 class TaskFinishListener
 {
-    public function __construct(private LoggerInterface $logger)
+    public function __construct(private readonly LoggerInterface $logger)
     {
     }
 

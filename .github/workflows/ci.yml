@@ -11,6 +11,5 @@ jobs:
     uses: shlinkio/github-actions/.github/workflows/php-lib-ci.yml@main
     with:
       extra-extensions: openswoole-4.11.1
-      with-php-eight: false
     secrets:
       INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}
