@@ -11,13 +11,12 @@ use Psr\Container\ContainerInterface;
 
 use function Shlinkio\Shlink\EventDispatcher\lazyListener;
 
-class AsyncListenersProviderDelegator
+class SwooleListenersProviderDelegator
 {
     public function __invoke(ContainerInterface $container, string $s, callable $factory): SwooleListenerProvider
     {
         /** @var SwooleListenerProvider $provider */
         $provider = $factory();
-
         $asyncEvents = $container->get('config')['events']['async'] ?? [];
 
         foreach ($asyncEvents as $eventName => $listeners) {

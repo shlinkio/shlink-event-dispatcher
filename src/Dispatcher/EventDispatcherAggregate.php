@@ -26,7 +26,7 @@ class EventDispatcherAggregate implements EventDispatcherInterface
 
     public function dispatch(object $event): object
     {
-        if (!$this->fallbackAsync && in_array(get_class($event), $this->asyncEvents, true)) {
+        if (! $this->fallbackAsync && in_array(get_class($event), $this->asyncEvents, true)) {
             return $this->asyncDispatcher->dispatch($event);
         }
 

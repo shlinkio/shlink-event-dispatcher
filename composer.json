@@ -26,10 +26,13 @@
         "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-master",
-        "shlinkio/php-coding-standard": "~2.3.0"
+        "shlinkio/php-coding-standard": "~2.3.0",
+        "spiral/roadrunner-jobs": "^2.3",
+        "symfony/var-dumper": "^6.1"
     },
     "suggest": {
-        "mezzio/mezzio-swoole": "To be able to run async event dispatchers as swoole tasks"
+        "mezzio/mezzio-swoole": "To be able to run async event dispatchers as swoole tasks",
+        "spiral/roadrunner-jobs": "To be able to run async event dispatchers as roadrunner job tasks"
     },
     "autoload": {
         "psr-4": {

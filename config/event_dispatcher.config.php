@@ -8,7 +8,7 @@ use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 use Mezzio\Swoole\Event\SwooleListenerProvider;
 use Psr\EventDispatcher as Psr;
 use Psr\Log\LoggerInterface;
-use Shlinkio\Shlink\EventDispatcher\Listener\AsyncListenersProviderDelegator;
+use Shlinkio\Shlink\EventDispatcher\Listener\SwooleListenersProviderDelegator;
 
 return [
 
@@ -30,7 +30,7 @@ return [
 
         'delegators' => [
             SwooleListenerProvider::class => [
-                AsyncListenersProviderDelegator::class,
+                SwooleListenersProviderDelegator::class,
             ],
         ],
     ],

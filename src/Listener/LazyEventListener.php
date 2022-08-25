@@ -8,8 +8,10 @@ use Psr\Container\ContainerInterface;
 
 class LazyEventListener
 {
-    public function __construct(private ContainerInterface $container, private string $listenerServiceName)
-    {
+    public function __construct(
+        private readonly ContainerInterface $container,
+        private readonly string $listenerServiceName,
+    ) {
     }
 
     public function __invoke(object $event): void
