@@ -8,7 +8,6 @@ use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 use Mezzio\Swoole\Event\SwooleListenerProvider;
 use Psr\EventDispatcher as Psr;
 use Psr\Log\LoggerInterface;
-use Shlinkio\Shlink\EventDispatcher\Listener\SwooleListenersProviderDelegator;
 
 return [
 
@@ -19,9 +18,11 @@ return [
 
     'dependencies' => [
         'factories' => [
-            Listener\TaskFinishListener::class => ConfigAbstractFactory::class,
+            Swoole\TaskFinishListener::class => ConfigAbstractFactory::class,
             Dispatcher\SyncEventDispatcherFactory::SYNC_DISPATCHER => Dispatcher\SyncEventDispatcherFactory::class,
             Dispatcher\EventDispatcherAggregate::class => Dispatcher\EventDispatcherAggregateFactory::class,
+            RoadRunner\RoadRunnerEventDispatcherFactory::ROAD_RUNNER_DISPATCHER
+                => RoadRunner\RoadRunnerEventDispatcherFactory::class,
         ],
 
         'aliases' => [
@@ -30,13 +31,13 @@ return [
 
         'delegators' => [
             SwooleListenerProvider::class => [
-                SwooleListenersProviderDelegator::class,
+                Swoole\SwooleListenersProviderDelegator::class,
             ],
         ],
     ],
 
     ConfigAbstractFactory::class => [
-        Listener\TaskFinishListener::class => [LoggerInterface::class],
+        Swoole\TaskFinishListener::class => [LoggerInterface::class],
     ],
 
 ];

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Shlinkio\Shlink\EventDispatcher\Listener\SwooleListenersProviderDelegator;
+use Shlinkio\Shlink\EventDispatcher\Swoole\SwooleListenersProviderDelegator;
 use stdClass;
 
 use function iterator_to_array;

@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
-use Shlinkio\Shlink\EventDispatcher\Listener\TaskFinishListener;
+use Shlinkio\Shlink\EventDispatcher\Swoole\TaskFinishListener;
 
 class TaskFinishListenerTest extends TestCase
 {
