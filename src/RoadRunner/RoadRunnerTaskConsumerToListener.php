@@ -19,7 +19,7 @@ class RoadRunnerTaskConsumerToListener
     ) {
     }
 
-    private function listenForTasks(): void
+    public function listenForTasks(): void
     {
         while ($task = $this->consumer->waitTask()) {
             try {
