@@ -23,6 +23,8 @@ return [
             Dispatcher\EventDispatcherAggregate::class => Dispatcher\EventDispatcherAggregateFactory::class,
             RoadRunner\RoadRunnerEventDispatcherFactory::ROAD_RUNNER_DISPATCHER
                 => RoadRunner\RoadRunnerEventDispatcherFactory::class,
+            RoadRunner\RoadRunnerTaskConsumerToListener::class
+                => RoadRunner\RoadRunnerTaskConsumerToListenerFactory::class,
         ],
 
         'aliases' => [
