@@ -18,7 +18,7 @@ return [
                     TaskInvokerListener::class,
                 ],
                 TaskFinishEvent::class => [
-                    Listener\TaskFinishListener::class,
+                    Swoole\TaskFinishListener::class,
                 ],
             ],
         ],

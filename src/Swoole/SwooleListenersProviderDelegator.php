@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shlinkio\Shlink\EventDispatcher\Listener;
+namespace Shlinkio\Shlink\EventDispatcher\Swoole;
 
 use Laminas\ServiceManager\ServiceManager;
 use Mezzio\Swoole\Event\SwooleListenerProvider;
@@ -11,13 +11,12 @@ use Psr\Container\ContainerInterface;
 
 use function Shlinkio\Shlink\EventDispatcher\lazyListener;
 
-class AsyncListenersProviderDelegator
+class SwooleListenersProviderDelegator
 {
     public function __invoke(ContainerInterface $container, string $s, callable $factory): SwooleListenerProvider
     {
         /** @var SwooleListenerProvider $provider */
         $provider = $factory();
-
         $asyncEvents = $container->get('config')['events']['async'] ?? [];
 
         foreach ($asyncEvents as $eventName => $listeners) {

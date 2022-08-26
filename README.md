@@ -1,8 +1,8 @@
 # Shlink Event Dispatcher
 
-This library simplifies registering async and regular PSR-14 event listeners while using [`mezzio/mezzio-swoole`](https://docs.mezzio.dev/mezzio-swoole/). Async ones are executed using [swoole](https://www.swoole.co.uk/)'s task system.
+This library simplifies registering async and regular [PSR-14](https://www.php-fig.org/psr/psr-14/) event listeners while using [openswoole](https://openswoole.com/) via [`mezzio/mezzio-swoole`](https://docs.mezzio.dev/mezzio-swoole/), or [RoadRunner](https://roadrunner.dev/).
 
-Internally, this library registers the events as explained in [mezzio's documentation](https://docs.mezzio.dev/mezzio-swoole/v3/async-tasks/#dispatching-a-servicebasedtask-via-a-psr-14-event-dispatcher), but taking care of the boilerplate code for you.
+Async ones are executed using openswoole's task system or RoadRunner's jobs. This library takes care of the boilerplate of registering events as async tasks/jobs, and you just interact with plain PSR-14 listeners and events.
 
 Most of the elements it provides require a [PSR-11](https://www.php-fig.org/psr/psr-11/) container, and it's easy to integrate on [mezzio](https://github.com/mezzio/mezzio) applications thanks to the `ConfigProvider` it includes.
 
@@ -25,11 +25,13 @@ Install this library using composer:
 
 This module allows to register both regular and asynchronous event listeners on a PSR-14 EventDispatcher.
 
-Regular listeners are executed on the same process, blocking the dispatching of the HTTP request, while asynchronous listeners are delegated to a swoole/openswoole background task, making the request to resolve immediately.
+Regular listeners are executed on the same process, blocking the dispatching of the HTTP request, while asynchronous listeners are delegated to a openswoole background task or RoadRunner job, making the request to resolve immediately.
 
-If swoole/openswoole is not installed, async listeners are ignored by default, but you can choose to make them to be registered as regular listeners instead.
+If neither openswoole nor RoadRunner are found, async listeners are ignored by default, but you can choose to make them to be registered as regular listeners instead.
 
-> **Important**: In order to be able to integrate with swoole/openswoole tasks, you need to install `mezzio/mezzio-swoole:^3.3`.
+> **Note**
+> * In order to be able to integrate with openswoole tasks, you need to install `mezzio/mezzio-swoole`.
+> * In order to be able to integrate with RoadRunner jobs, you need to install `spiral/roadrunner-jobs`.
 
 In order to register listeners you have to use a configuration like this:
 

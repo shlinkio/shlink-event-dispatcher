@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ShlinkioTest\Shlink\EventDispatcher\Listener;
+namespace ShlinkioTest\Shlink\EventDispatcher\Swoole;
 
 use Laminas\ServiceManager\ServiceManager;
 use Mezzio\Swoole\Event\SwooleListenerProvider;
@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Shlinkio\Shlink\EventDispatcher\Listener\AsyncListenersProviderDelegator;
+use Shlinkio\Shlink\EventDispatcher\Swoole\SwooleListenersProviderDelegator;
 use stdClass;
 
 use function iterator_to_array;
 
-class AsyncListenersProviderDelegatorTest extends TestCase
+class SwooleListenersProviderDelegatorTest extends TestCase
 {
     use ProphecyTrait;
 
-    private AsyncListenersProviderDelegator $delegator;
+    private SwooleListenersProviderDelegator $delegator;
     private ObjectProphecy $container;
 
     public function setUp(): void
     {
-        $this->delegator = new AsyncListenersProviderDelegator();
+        $this->delegator = new SwooleListenersProviderDelegator();
         $this->container = $this->prophesize(ServiceManager::class);
     }
 

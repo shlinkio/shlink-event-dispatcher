@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
+use League\Event\EventDispatcher;
 use Mezzio\Swoole\Event\EventDispatcherInterface as SwooleEventDispatcherInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -12,6 +13,7 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Shlinkio\Shlink\EventDispatcher\Dispatcher\EventDispatcherAggregateFactory;
 use Shlinkio\Shlink\EventDispatcher\Dispatcher\SyncEventDispatcherFactory;
+use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerEventDispatcherFactory;
 
 class EventDispatcherAggregateFactoryTest extends TestCase
 {
@@ -24,6 +26,9 @@ class EventDispatcherAggregateFactoryTest extends TestCase
     {
         $this->factory = new EventDispatcherAggregateFactory();
         $this->container = $this->prophesize(ContainerInterface::class);
+        $this->container->get(RoadRunnerEventDispatcherFactory::ROAD_RUNNER_DISPATCHER)->willReturn(
+            new EventDispatcher(),
+        );
     }
 
     /**
