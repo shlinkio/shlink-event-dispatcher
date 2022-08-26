@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shlinkio\Shlink\EventDispatcher\RoadRunner;
 
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Shlinkio\Shlink\EventDispatcher\Util\JsonUnserializable;
 use Spiral\RoadRunner\Jobs\ConsumerInterface;
 use Throwable;
@@ -16,6 +17,7 @@ class RoadRunnerTaskConsumerToListener
     public function __construct(
         private readonly ConsumerInterface $consumer,
         private readonly ContainerInterface $container,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -25,6 +27,11 @@ class RoadRunnerTaskConsumerToListener
             try {
                 $event = $task->getName();
                 if (! is_subclass_of($event, JsonUnserializable::class)) {
+                    $this->logger->warning(
+                        'It was not possible to process task for event "{event}", because it does not '
+                        . 'implement {implements}',
+                        ['event' => $event, 'implements' => JsonUnserializable::class],
+                    );
                     $task->complete();
                     continue;
                 }

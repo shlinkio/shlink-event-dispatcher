@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ShlinkioTest\Shlink\EventDispatcher\Listener;
+namespace ShlinkioTest\Shlink\EventDispatcher\Swoole;
 
 use Laminas\ServiceManager\ServiceManager;
 use Mezzio\Swoole\Event\SwooleListenerProvider;

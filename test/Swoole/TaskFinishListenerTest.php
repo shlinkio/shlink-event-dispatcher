@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ShlinkioTest\Shlink\EventDispatcher\Listener;
+namespace ShlinkioTest\Shlink\EventDispatcher\Swoole;
 
 use Mezzio\Swoole\Event\TaskFinishEvent;
 use PHPUnit\Framework\TestCase;
