@@ -21,10 +21,6 @@ return [
             Swoole\TaskFinishListener::class => ConfigAbstractFactory::class,
             Dispatcher\SyncEventDispatcherFactory::SYNC_DISPATCHER => Dispatcher\SyncEventDispatcherFactory::class,
             Dispatcher\EventDispatcherAggregate::class => Dispatcher\EventDispatcherAggregateFactory::class,
-            RoadRunner\RoadRunnerEventDispatcherFactory::ROAD_RUNNER_DISPATCHER
-                => RoadRunner\RoadRunnerEventDispatcherFactory::class,
-            RoadRunner\RoadRunnerTaskConsumerToListener::class
-                => RoadRunner\RoadRunnerTaskConsumerToListenerFactory::class,
         ],
 
         'aliases' => [

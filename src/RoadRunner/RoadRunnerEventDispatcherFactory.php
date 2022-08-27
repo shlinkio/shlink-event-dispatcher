@@ -8,7 +8,6 @@ use League\Event\EventDispatcher;
 use League\Event\PrioritizedListenerRegistry;
 use Psr\Container\ContainerInterface;
 use Spiral\RoadRunner\Jobs\Jobs;
-use Spiral\RoadRunner\Jobs\Serializer\JsonSerializer;
 
 use function Shlinkio\Shlink\Config\env;
 use function Shlinkio\Shlink\EventDispatcher\roadRunnerTaskListener;
@@ -22,18 +21,21 @@ class RoadRunnerEventDispatcherFactory
         $provider = new PrioritizedListenerRegistry();
         $eventsConfig = $container->get('config')['events'] ?? [];
 
-        $this->registerEvents($provider, $eventsConfig['async'] ?? []);
+        $this->registerEvents($provider, $container, $eventsConfig['async'] ?? []);
 
         return new EventDispatcher($provider);
     }
 
-    private function registerEvents(PrioritizedListenerRegistry $provider, array $events): void
-    {
+    private function registerEvents(
+        PrioritizedListenerRegistry $provider,
+        ContainerInterface $container,
+        array $events,
+    ): void {
         if (env('RR_MODE') === null) {
             return;
         }
 
-        $jobs = new Jobs(null, new JsonSerializer());
+        $jobs = $container->get(Jobs::class);
         foreach ($events as $eventName => $listeners) {
             foreach ($listeners as $listener) {
                 $provider->subscribeTo($eventName, roadRunnerTaskListener($jobs, $listener));

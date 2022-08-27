@@ -11,6 +11,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use ReflectionObject;
 use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerEventDispatcherFactory;
+use Spiral\RoadRunner\Jobs\Jobs;
+use Spiral\RoadRunner\Jobs\JobsInterface;
 
 use function putenv;
 use function sprintf;
@@ -34,6 +36,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
                 ],
             ],
         ]);
+        $this->container->get(Jobs::class)->willReturn($this->prophesize(JobsInterface::class)->reveal());
     }
 
     protected function tearDown(): void
