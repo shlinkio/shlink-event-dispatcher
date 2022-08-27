@@ -26,7 +26,7 @@ return [
                     $c->get(LoggerInterface::class),
                 ),
             JsonSerializer::class => InvokableFactory::class,
-            Worker::class => [Worker::class, 'create'],
+            Worker::class => static fn () => Worker::create(),
             Jobs::class => static fn (ContainerInterface $c) => new Jobs(null, $c->get(JsonSerializer::class)),
             Consumer::class => ConfigAbstractFactory::class,
         ],
