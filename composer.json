@@ -19,7 +19,7 @@
         "shlinkio/shlink-config": "^2.0"
     },
     "require-dev": {
-        "infection/infection": "^0.26",
+        "infection/infection": "^0.26.15",
         "mezzio/mezzio-swoole": "^4.2",
         "openswoole/ide-helper": "~4.11.1",
         "phpspec/prophecy-phpunit": "^2.0",
