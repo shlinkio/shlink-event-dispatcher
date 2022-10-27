@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -19,99 +17,91 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
 class RoadRunnerTaskConsumerToListenerTest extends TestCase
 {
-    use ProphecyTrait;
-
     private RoadRunnerTaskConsumerToListener $taskConsumer;
-    private ObjectProphecy $consumer;
-    private ObjectProphecy $container;
-    private ObjectProphecy $logger;
+    private MockObject & ConsumerInterface $consumer;
+    private MockObject & ContainerInterface $container;
+    private MockObject & LoggerInterface $logger;
 
     public function setUp(): void
     {
-        $this->consumer = $this->prophesize(ConsumerInterface::class);
-        $this->container = $this->prophesize(ContainerInterface::class);
-        $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->consumer = $this->createMock(ConsumerInterface::class);
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
-        $this->taskConsumer = new RoadRunnerTaskConsumerToListener(
-            $this->consumer->reveal(),
-            $this->container->reveal(),
-            $this->logger->reveal(),
-        );
+        $this->taskConsumer = new RoadRunnerTaskConsumerToListener($this->consumer, $this->container, $this->logger);
     }
 
     /** @test */
     public function warningIsLoggedWhenEventIsNotDeserializable(): void
     {
         $callCount = 0;
-        $task = $this->prophesize(ReceivedTaskInterface::class);
-        $task->getName()->willReturn('not_deserializable');
-        $waitTask = $this->consumer->waitTask()->will(function () use (&$callCount, $task) {
-            $callCount++;
-            return $callCount === 1 ? $task->reveal() : null;
-        });
-
-        $this->taskConsumer->listenForTasks();
-
-        $waitTask->shouldHaveBeenCalledTimes(2);
-        $this->logger->warning(
+        $task = $this->createMock(ReceivedTaskInterface::class);
+        $task->method('getName')->willReturn('not_deserializable');
+        $task->expects($this->once())->method('complete');
+        $task->expects($this->never())->method('fail');
+        $this->consumer->expects($this->exactly(2))->method('waitTask')->willReturnCallback(
+            function () use (&$callCount, $task) {
+                $callCount++;
+                return $callCount === 1 ? $task : null;
+            },
+        );
+        $this->container->expects($this->never())->method('get');
+        $this->logger->expects($this->once())->method('warning')->with(
             'It was not possible to process task for event "{event}", because it does not implement {implements}',
             ['event' => 'not_deserializable', 'implements' => JsonUnserializable::class],
-        )->shouldHaveBeenCalledOnce();
-        $this->container->get(Argument::cetera())->shouldNotHaveBeenCalled();
-        $task->complete()->shouldHaveBeenCalledOnce();
-        $task->fail(Argument::cetera())->shouldNotHaveBeenCalled();
+        );
+
+        $this->taskConsumer->listenForTasks();
     }
 
     /** @test */
     public function listenerIsLoadedAndInvoked(): void
     {
         $callCount = 0;
-        $task = $this->prophesize(ReceivedTaskInterface::class);
-        $task->getName()->willReturn(DummyJsonDeserializable::class);
-        $task->getPayload()->willReturn([
+        $task = $this->createMock(ReceivedTaskInterface::class);
+        $task->method('getName')->willReturn(DummyJsonDeserializable::class);
+        $task->method('getPayload')->willReturn([
             'listenerServiceName' => 'my_listener',
             'eventPayload' => [],
         ]);
-        $waitTask = $this->consumer->waitTask()->will(function () use (&$callCount, $task) {
-            $callCount++;
-            return $callCount === 1 ? $task->reveal() : null;
+        $task->expects($this->once())->method('complete');
+        $task->expects($this->never())->method('fail');
+        $this->consumer->expects($this->exactly(2))->method('waitTask')->willReturnCallback(
+            function () use (&$callCount, $task) {
+                $callCount++;
+                return $callCount === 1 ? $task : null;
+            },
+        );
+        $this->container->expects($this->once())->method('get')->with('my_listener')->willReturn(function (): void {
         });
-        $getListener = $this->container->get('my_listener')->willReturn(function (): void {
-        });
+        $this->logger->expects($this->never())->method('warning');
 
         $this->taskConsumer->listenForTasks();
-
-        $waitTask->shouldHaveBeenCalledTimes(2);
-        $this->logger->warning(Argument::cetera())->shouldNotHaveBeenCalled();
-        $getListener->shouldHaveBeenCalledOnce();
-        $task->complete()->shouldHaveBeenCalledOnce();
-        $task->fail(Argument::cetera())->shouldNotHaveBeenCalled();
     }
 
     /** @test */
     public function taskIsFailedInCaseOfError(): void
     {
         $callCount = 0;
-        $task = $this->prophesize(ReceivedTaskInterface::class);
-        $task->getName()->willReturn(DummyJsonDeserializable::class);
-        $task->getPayload()->willReturn([
+        $task = $this->createMock(ReceivedTaskInterface::class);
+        $task->method('getName')->willReturn(DummyJsonDeserializable::class);
+        $task->method('getPayload')->willReturn([
             'listenerServiceName' => 'my_listener',
             'eventPayload' => [],
         ]);
-        $waitTask = $this->consumer->waitTask()->will(function () use (&$callCount, $task) {
-            $callCount++;
-            return $callCount === 1 ? $task->reveal() : null;
-        });
-        $getListener = $this->container->get('my_listener')->willReturn(function (): void {
+        $task->expects($this->never())->method('complete');
+        $task->expects($this->once())->method('fail')->with($this->isInstanceOf(RuntimeException::class));
+        $this->consumer->expects($this->exactly(2))->method('waitTask')->willReturnCallback(
+            function () use (&$callCount, $task) {
+                $callCount++;
+                return $callCount === 1 ? $task : null;
+            },
+        );
+        $this->container->expects($this->once())->method('get')->with('my_listener')->willReturn(function (): void {
             throw new RuntimeException('error');
         });
+        $this->logger->expects($this->never())->method('warning');
 
         $this->taskConsumer->listenForTasks();
-
-        $waitTask->shouldHaveBeenCalledTimes(2);
-        $this->logger->warning(Argument::cetera())->shouldNotHaveBeenCalled();
-        $getListener->shouldHaveBeenCalledOnce();
-        $task->complete()->shouldNotHaveBeenCalled();
-        $task->fail(Argument::type(RuntimeException::class))->shouldHaveBeenCalledOnce();
     }
 }
