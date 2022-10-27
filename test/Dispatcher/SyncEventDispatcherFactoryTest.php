@@ -14,8 +14,6 @@ use Shlinkio\Shlink\EventDispatcher\Dispatcher\SyncEventDispatcherFactory;
 use stdClass;
 use Symfony\Contracts\EventDispatcher\Event;
 
-use function iterator_to_array;
-
 class SyncEventDispatcherFactoryTest extends TestCase
 {
     private SyncEventDispatcherFactory $factory;
@@ -50,13 +48,13 @@ class SyncEventDispatcherFactoryTest extends TestCase
         yield 'empty config' => [
             [],
             static function (ListenerProviderInterface $provider): void {
-                Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
+                Assert::assertEmpty([...$provider->getListenersForEvent(new stdClass())]);
             },
         ];
         yield 'empty events' => [
             ['events' => []],
             static function (ListenerProviderInterface $provider): void {
-                Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
+                Assert::assertEmpty([...$provider->getListenersForEvent(new stdClass())]);
             },
         ];
         yield 'empty regular events' => [
@@ -69,7 +67,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 ],
             ]],
             static function (ListenerProviderInterface $provider): void {
-                Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
+                Assert::assertEmpty([...$provider->getListenersForEvent(new stdClass())]);
             },
         ];
         yield 'non-empty regular events' => [
@@ -82,7 +80,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 ],
             ]],
             static function (ListenerProviderInterface $provider): void {
-                Assert::assertCount(2, iterator_to_array($provider->getListenersForEvent(new stdClass())));
+                Assert::assertCount(2, [...$provider->getListenersForEvent(new stdClass())]);
             },
         ];
         yield 'non-empty regular events and async' => [
@@ -102,8 +100,8 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 ],
             ]],
             static function (ListenerProviderInterface $provider): void {
-                Assert::assertCount(2, iterator_to_array($provider->getListenersForEvent(new stdClass())));
-                Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new Event())));
+                Assert::assertCount(2, [...$provider->getListenersForEvent(new stdClass())]);
+                Assert::assertEmpty([...$provider->getListenersForEvent(new Event())]);
             },
         ];
         yield 'non-empty regular events and async with fallback' => [
@@ -124,8 +122,8 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 'fallback_async_to_regular' => true,
             ]],
             static function (ListenerProviderInterface $provider): void {
-                Assert::assertCount(2, iterator_to_array($provider->getListenersForEvent(new stdClass())));
-                Assert::assertCount(3, iterator_to_array($provider->getListenersForEvent(new Event())));
+                Assert::assertCount(2, [...$provider->getListenersForEvent(new stdClass())]);
+                Assert::assertCount(3, [...$provider->getListenersForEvent(new Event())]);
             },
         ];
     }
