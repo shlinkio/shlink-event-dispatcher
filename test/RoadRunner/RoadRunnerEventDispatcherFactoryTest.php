@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
 use League\Event\EventDispatcher;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use ReflectionObject;
 use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerEventDispatcherFactory;
@@ -19,24 +18,24 @@ use function sprintf;
 
 class RoadRunnerEventDispatcherFactoryTest extends TestCase
 {
-    use ProphecyTrait;
-
     private RoadRunnerEventDispatcherFactory $factory;
-    private ObjectProphecy $container;
+    private MockObject & ContainerInterface $container;
 
     protected function setUp(): void
     {
         $this->factory = new RoadRunnerEventDispatcherFactory();
-        $this->container = $this->prophesize(ContainerInterface::class);
-        $this->container->get('config')->willReturn([
-            'events' => [
-                'async' => [
-                    'foo' => ['bar', 'baz'],
-                    'bar' => ['foo'],
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->container->method('get')->willReturnMap([
+            ['config', [
+                'events' => [
+                    'async' => [
+                        'foo' => ['bar', 'baz'],
+                        'bar' => ['foo'],
+                    ],
                 ],
-            ],
+            ]],
+            [Jobs::class, $this->createMock(JobsInterface::class)],
         ]);
-        $this->container->get(Jobs::class)->willReturn($this->prophesize(JobsInterface::class)->reveal());
     }
 
     protected function tearDown(): void
@@ -53,7 +52,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         putenv(sprintf('RR_MODE%s', $mode));
 
         /** @var EventDispatcher $dispatcher */
-        $dispatcher = ($this->factory)($this->container->reveal());
+        $dispatcher = ($this->factory)($this->container);
         $listenerProvider = $this->getPrivateProp($dispatcher, 'listenerProvider');
         $listenersPerEvent = $this->getPrivateProp($listenerProvider, 'listenersPerEvent');
 
