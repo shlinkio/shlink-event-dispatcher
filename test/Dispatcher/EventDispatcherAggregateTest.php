@@ -4,24 +4,21 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Shlinkio\Shlink\EventDispatcher\Dispatcher\EventDispatcherAggregate;
 use stdClass;
 
 class EventDispatcherAggregateTest extends TestCase
 {
-    use ProphecyTrait;
-
-    private ObjectProphecy $asyncDispatcher;
-    private ObjectProphecy $regularDispatcher;
+    private MockObject & EventDispatcherInterface $asyncDispatcher;
+    private MockObject & EventDispatcherInterface $regularDispatcher;
 
     public function setUp(): void
     {
-        $this->asyncDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $this->regularDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $this->asyncDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->regularDispatcher = $this->createMock(EventDispatcherInterface::class);
     }
 
     /**
@@ -31,18 +28,19 @@ class EventDispatcherAggregateTest extends TestCase
     public function expectedDispatcherIsInvoked(array $eventsConfig, int $asyncCalls, int $regularCalls): void
     {
         $event = new stdClass();
-        $asyncDispatch = $this->asyncDispatcher->dispatch($event)->willReturn($event);
-        $regularDispatch = $this->regularDispatcher->dispatch($event)->willReturn($event);
+        $this->asyncDispatcher->expects($this->exactly($asyncCalls))->method('dispatch')->with($event)->willReturn(
+            $event,
+        );
+        $this->regularDispatcher->expects($this->exactly($regularCalls))->method('dispatch')->with($event)->willReturn(
+            $event,
+        );
         $dispatcher = new EventDispatcherAggregate(
-            $this->asyncDispatcher->reveal(),
-            $this->regularDispatcher->reveal(),
+            $this->asyncDispatcher,
+            $this->regularDispatcher,
             $eventsConfig,
         );
 
         $dispatcher->dispatch($event);
-
-        $asyncDispatch->shouldHaveBeenCalledTimes($asyncCalls);
-        $regularDispatch->shouldHaveBeenCalledTimes($regularCalls);
     }
 
     public function provideEventsConfigs(): iterable
