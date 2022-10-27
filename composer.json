@@ -22,7 +22,6 @@
         "infection/infection": "^0.26.15",
         "mezzio/mezzio-swoole": "^4.2",
         "openswoole/ide-helper": "~4.11.1",
-        "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-master",
