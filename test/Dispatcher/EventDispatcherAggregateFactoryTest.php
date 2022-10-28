@@ -6,9 +6,8 @@ namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
 use League\Event\EventDispatcher;
 use Mezzio\Swoole\Event\EventDispatcherInterface as SwooleEventDispatcherInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Shlinkio\Shlink\EventDispatcher\Dispatcher\EventDispatcherAggregateFactory;
@@ -17,18 +16,15 @@ use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerEventDispatcherFactory;
 
 class EventDispatcherAggregateFactoryTest extends TestCase
 {
-    use ProphecyTrait;
-
     private EventDispatcherAggregateFactory $factory;
-    private ObjectProphecy $container;
+    private EventDispatcherInterface $ed;
+    private MockObject & ContainerInterface $container;
 
     public function setUp(): void
     {
         $this->factory = new EventDispatcherAggregateFactory();
-        $this->container = $this->prophesize(ContainerInterface::class);
-        $this->container->get(RoadRunnerEventDispatcherFactory::ROAD_RUNNER_DISPATCHER)->willReturn(
-            new EventDispatcher(),
-        );
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->ed = new EventDispatcher();
     }
 
     /**
@@ -37,19 +33,16 @@ class EventDispatcherAggregateFactoryTest extends TestCase
      */
     public function createsAsyncDispatcherWhenNotFoundInContainer(array $config): void
     {
-        $hasAsyncDispatcher = $this->container->has(SwooleEventDispatcherInterface::class)->willReturn(false);
-        $getAsyncDispatcher = $this->container->get(SwooleEventDispatcherInterface::class);
-        $getRegularDispatcher = $this->container->get(SyncEventDispatcherFactory::SYNC_DISPATCHER)->willReturn(
-            $this->prophesize(EventDispatcherInterface::class)->reveal(),
-        );
-        $getConfig = $this->container->get('config')->willReturn($config);
+        $this->container->expects($this->once())->method('has')->with(
+            SwooleEventDispatcherInterface::class,
+        )->willReturn(false);
+        $this->container->expects($this->exactly(3))->method('get')->willReturnMap([
+            [RoadRunnerEventDispatcherFactory::ROAD_RUNNER_DISPATCHER, $this->ed],
+            [SyncEventDispatcherFactory::SYNC_DISPATCHER, $this->ed],
+            ['config', $config],
+        ]);
 
-        ($this->factory)($this->container->reveal());
-
-        $hasAsyncDispatcher->shouldHaveBeenCalledOnce();
-        $getAsyncDispatcher->shouldNotHaveBeenCalled();
-        $getRegularDispatcher->shouldHaveBeenCalledOnce();
-        $getConfig->shouldHaveBeenCalledOnce();
+        ($this->factory)($this->container);
     }
 
     /**
@@ -58,23 +51,16 @@ class EventDispatcherAggregateFactoryTest extends TestCase
      */
     public function fetchesAsyncDispatcherFromContainerWhenFound(array $config): void
     {
-        $dispatcherMock = $this->prophesize(EventDispatcherInterface::class)->reveal();
+        $this->container->expects($this->once())->method('has')->with(
+            SwooleEventDispatcherInterface::class,
+        )->willReturn(true);
+        $this->container->expects($this->exactly(3))->method('get')->willReturnMap([
+            [SwooleEventDispatcherInterface::class, $this->ed],
+            [SyncEventDispatcherFactory::SYNC_DISPATCHER, $this->ed],
+            ['config', $config],
+        ]);
 
-        $hasAsyncDispatcher = $this->container->has(SwooleEventDispatcherInterface::class)->willReturn(true);
-        $getAsyncDispatcher = $this->container->get(SwooleEventDispatcherInterface::class)->willReturn(
-            $dispatcherMock,
-        );
-        $getRegularDispatcher = $this->container->get(SyncEventDispatcherFactory::SYNC_DISPATCHER)->willReturn(
-            $dispatcherMock,
-        );
-        $getConfig = $this->container->get('config')->willReturn($config);
-
-        ($this->factory)($this->container->reveal());
-
-        $hasAsyncDispatcher->shouldHaveBeenCalledOnce();
-        $getAsyncDispatcher->shouldHaveBeenCalledOnce();
-        $getRegularDispatcher->shouldHaveBeenCalledOnce();
-        $getConfig->shouldHaveBeenCalledOnce();
+        ($this->factory)($this->container);
     }
 
     public function provideConfigs(): iterable

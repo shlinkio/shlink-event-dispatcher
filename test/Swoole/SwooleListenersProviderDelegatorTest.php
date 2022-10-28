@@ -8,10 +8,8 @@ use Laminas\ServiceManager\ServiceManager;
 use Mezzio\Swoole\Event\SwooleListenerProvider;
 use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Shlinkio\Shlink\EventDispatcher\Swoole\SwooleListenersProviderDelegator;
 use stdClass;
 
@@ -19,47 +17,50 @@ use function iterator_to_array;
 
 class SwooleListenersProviderDelegatorTest extends TestCase
 {
-    use ProphecyTrait;
-
     private SwooleListenersProviderDelegator $delegator;
-    private ObjectProphecy $container;
+    private MockObject & ServiceManager $container;
 
     public function setUp(): void
     {
         $this->delegator = new SwooleListenersProviderDelegator();
-        $this->container = $this->prophesize(ServiceManager::class);
+        $this->container = $this->createMock(ServiceManager::class);
     }
 
     /**
      * @test
      * @dataProvider provideConfigAndListeners
      */
-    public function expectedEventListenersAreRegistered(array $config, callable $assertListeners): void
-    {
-        $getConfig = $this->container->get('config')->willReturn($config);
+    public function expectedEventListenersAreRegistered(
+        array $config,
+        callable $setUp,
+        callable $assertListeners,
+    ): void {
+        $this->container->expects($this->once())->method('get')->with('config')->willReturn($config);
+        $setUp($this->container);
 
-        $provider = ($this->delegator)($this->container->reveal(), '', fn () => new SwooleListenerProvider());
+        $provider = ($this->delegator)($this->container, '', fn () => new SwooleListenerProvider());
 
-        $getConfig->shouldHaveBeenCalledOnce();
-        $assertListeners($provider, $this->container);
+        $assertListeners($provider);
     }
 
     public function provideConfigAndListeners(): iterable
     {
         yield 'empty config' => [
             [],
-            static function (SwooleListenerProvider $provider, ObjectProphecy $container): void {
-                /** @var ServiceManager|ObjectProphecy $container */
+            function (MockObject & ServiceManager $container): void {
+                $container->expects($this->never())->method('addDelegator');
+            },
+            static function (SwooleListenerProvider $provider): void {
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
-                $container->addDelegator(Argument::cetera())->shouldNotHaveBeenCalled();
             },
         ];
         yield 'empty events' => [
             ['events' => []],
-            static function (SwooleListenerProvider $provider, ObjectProphecy $container): void {
-                /** @var ServiceManager|ObjectProphecy $container */
+            function (MockObject & ServiceManager $container): void {
+                $container->expects($this->never())->method('addDelegator');
+            },
+            static function (SwooleListenerProvider $provider): void {
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
-                $container->addDelegator(Argument::cetera())->shouldNotHaveBeenCalled();
             },
         ];
         yield 'no async events' => [
@@ -71,10 +72,11 @@ class SwooleListenersProviderDelegatorTest extends TestCase
                     ],
                 ],
             ]],
-            static function (SwooleListenerProvider $provider, ObjectProphecy $container): void {
-                /** @var ServiceManager|ObjectProphecy $container */
+            function (MockObject & ServiceManager $container): void {
+                $container->expects($this->never())->method('addDelegator');
+            },
+            static function (SwooleListenerProvider $provider): void {
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
-                $container->addDelegator(Argument::cetera())->shouldNotHaveBeenCalled();
             },
         ];
         yield 'async events' => [
@@ -86,11 +88,14 @@ class SwooleListenersProviderDelegatorTest extends TestCase
                     ],
                 ],
             ]],
-            static function (SwooleListenerProvider $provider, ObjectProphecy $container): void {
-                /** @var ServiceManager|ObjectProphecy $container */
+            function (MockObject & ServiceManager $container): void {
+                $container->expects($this->exactly(2))->method('addDelegator')->withConsecutive(
+                    ['foo', DeferredServiceListenerDelegator::class],
+                    ['bar', DeferredServiceListenerDelegator::class],
+                );
+            },
+            static function (SwooleListenerProvider $provider): void {
                 Assert::assertCount(2, iterator_to_array($provider->getListenersForEvent(new stdClass())));
-                $container->addDelegator('foo', DeferredServiceListenerDelegator::class)->shouldHaveBeenCalledOnce();
-                $container->addDelegator('bar', DeferredServiceListenerDelegator::class)->shouldHaveBeenCalledOnce();
             },
         ];
     }
