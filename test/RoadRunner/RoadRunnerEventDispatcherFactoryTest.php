@@ -59,7 +59,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         self::assertCount($amountOfListeners, $listenersPerEvent);
     }
 
-    public function provideEnv(): iterable
+    public static function provideEnv(): iterable
     {
         yield 'no-rr' => ['', 0];
         yield 'rr' => ['=http', 2];

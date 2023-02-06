@@ -43,7 +43,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
         $assertListeners($provider);
     }
 
-    public function provideListeners(): iterable
+    public static function provideListeners(): iterable
     {
         yield 'empty config' => [
             [],

@@ -43,7 +43,7 @@ class EventDispatcherAggregateTest extends TestCase
         $dispatcher->dispatch($event);
     }
 
-    public function provideEventsConfigs(): iterable
+    public static function provideEventsConfigs(): iterable
     {
         yield 'no async events' => [[], 0, 1];
         yield 'async events' => [

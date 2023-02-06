@@ -9,6 +9,7 @@ use Mezzio\Swoole\Event\SwooleListenerProvider;
 use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
 use Shlinkio\Shlink\EventDispatcher\Swoole\SwooleListenersProviderDelegator;
 use stdClass;
@@ -43,12 +44,12 @@ class SwooleListenersProviderDelegatorTest extends TestCase
         $assertListeners($provider);
     }
 
-    public function provideConfigAndListeners(): iterable
+    public static function provideConfigAndListeners(): iterable
     {
         yield 'empty config' => [
             [],
             function (MockObject & ServiceManager $container): void {
-                $container->expects($this->never())->method('addDelegator');
+                $container->expects(new InvokedCount(0))->method('addDelegator');
             },
             static function (SwooleListenerProvider $provider): void {
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
@@ -57,7 +58,7 @@ class SwooleListenersProviderDelegatorTest extends TestCase
         yield 'empty events' => [
             ['events' => []],
             function (MockObject & ServiceManager $container): void {
-                $container->expects($this->never())->method('addDelegator');
+                $container->expects(new InvokedCount(0))->method('addDelegator');
             },
             static function (SwooleListenerProvider $provider): void {
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
@@ -73,7 +74,7 @@ class SwooleListenersProviderDelegatorTest extends TestCase
                 ],
             ]],
             function (MockObject & ServiceManager $container): void {
-                $container->expects($this->never())->method('addDelegator');
+                $container->expects(new InvokedCount(0))->method('addDelegator');
             },
             static function (SwooleListenerProvider $provider): void {
                 Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
@@ -89,9 +90,14 @@ class SwooleListenersProviderDelegatorTest extends TestCase
                 ],
             ]],
             function (MockObject & ServiceManager $container): void {
-                $container->expects($this->exactly(2))->method('addDelegator')->withConsecutive(
-                    ['foo', DeferredServiceListenerDelegator::class],
-                    ['bar', DeferredServiceListenerDelegator::class],
+                $callCount = 0;
+                $container->expects(new InvokedCount(2))->method('addDelegator')->willReturnCallback(
+                    function (string $name, string $factory) use (&$callCount): void {
+                        Assert::assertEquals($callCount === 0 ? 'foo' : 'bar', $name);
+                        Assert::assertEquals(DeferredServiceListenerDelegator::class, $factory);
+
+                        $callCount++;
+                    },
                 );
             },
             static function (SwooleListenerProvider $provider): void {

@@ -63,7 +63,7 @@ class EventDispatcherAggregateFactoryTest extends TestCase
         ($this->factory)($this->container);
     }
 
-    public function provideConfigs(): iterable
+    public static function provideConfigs(): iterable
     {
         yield 'empty config' => [[]];
         yield 'non-empty config' => [['events' => []]];

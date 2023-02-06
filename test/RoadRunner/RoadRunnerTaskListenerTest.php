@@ -47,7 +47,7 @@ class RoadRunnerTaskListenerTest extends TestCase
         ($this->listener)($event);
     }
 
-    public function provideEvents(): iterable
+    public static function provideEvents(): iterable
     {
         yield [new stdClass(), []];
         yield [
