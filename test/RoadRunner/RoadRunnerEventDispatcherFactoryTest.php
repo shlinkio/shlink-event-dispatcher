@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
 use League\Event\EventDispatcher;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -43,10 +45,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         putenv('RR_MODE');
     }
 
-    /**
-     * @test
-     * @dataProvider provideEnv
-     */
+    #[Test, DataProvider('provideEnv')]
     public function asyncEventsAreRegisteredOnRoadRunnerContextOnly(string $mode, int $amountOfListeners): void
     {
         putenv(sprintf('RR_MODE%s', $mode));

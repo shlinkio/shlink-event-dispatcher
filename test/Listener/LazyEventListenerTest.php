@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Listener;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -24,7 +25,7 @@ class LazyEventListenerTest extends TestCase
         $this->listener = new LazyEventListener($this->container, $this->listenerServiceName);
     }
 
-    /** @test */
+    #[Test]
     public function invokesServiceAsCallableWhenInvoked(): void
     {
         $isCalled = false;

@@ -8,6 +8,8 @@ use Laminas\ServiceManager\ServiceManager;
 use Mezzio\Swoole\Event\SwooleListenerProvider;
 use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
@@ -27,10 +29,7 @@ class SwooleListenersProviderDelegatorTest extends TestCase
         $this->container = $this->createMock(ServiceManager::class);
     }
 
-    /**
-     * @test
-     * @dataProvider provideConfigAndListeners
-     */
+    #[Test, DataProvider('provideConfigAndListeners')]
     public function expectedEventListenersAreRegistered(
         array $config,
         callable $setUp,

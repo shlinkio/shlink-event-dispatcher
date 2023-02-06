@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -25,10 +27,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
         $this->factory = new SyncEventDispatcherFactory();
     }
 
-    /**
-     * @test
-     * @dataProvider provideListeners
-     */
+    #[Test, DataProvider('provideListeners')]
     public function expectedListenersAreRegistered(array $config, callable $assertListeners): void
     {
         $this->container->expects($this->once())->method('get')->with('config')->willReturn($config);

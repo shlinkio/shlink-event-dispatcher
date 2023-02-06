@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -21,10 +23,7 @@ class EventDispatcherAggregateTest extends TestCase
         $this->regularDispatcher = $this->createMock(EventDispatcherInterface::class);
     }
 
-    /**
-     * @test
-     * @dataProvider provideEventsConfigs
-     */
+    #[Test, DataProvider('provideEventsConfigs')]
     public function expectedDispatcherIsInvoked(array $eventsConfig, int $asyncCalls, int $regularCalls): void
     {
         $event = new stdClass();

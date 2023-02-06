@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\Swoole;
 
 use Mezzio\Swoole\Event\TaskFinishEvent;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -21,7 +22,7 @@ class TaskFinishListenerTest extends TestCase
         $this->listener = new TaskFinishListener($this->logger);
     }
 
-    /** @test */
+    #[Test]
     public function loggerIsCalledWhenListenerIsInvoked(): void
     {
         $event = $this->createMock(TaskFinishEvent::class);
