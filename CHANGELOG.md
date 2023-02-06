@@ -10,7 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 
 ### Changed
 * Migrated infection config to json5.
-* Migrated From prophecy to PHPUnit mocks.
+* Migrated from prophecy to PHPUnit mocks.
+* Migrated to PHPUnit 10.
 
 ### Deprecated
 * *Nothing*
