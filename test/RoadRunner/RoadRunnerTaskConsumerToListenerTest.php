@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -31,7 +32,7 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
         $this->taskConsumer = new RoadRunnerTaskConsumerToListener($this->consumer, $this->container, $this->logger);
     }
 
-    /** @test */
+    #[Test]
     public function warningIsLoggedWhenEventIsNotDeserializable(): void
     {
         $callCount = 0;
@@ -54,7 +55,7 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
         $this->taskConsumer->listenForTasks();
     }
 
-    /** @test */
+    #[Test]
     public function listenerIsLoadedAndInvoked(): void
     {
         $callCount = 0;
@@ -79,7 +80,7 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
         $this->taskConsumer->listenForTasks();
     }
 
-    /** @test */
+    #[Test]
     public function taskIsFailedInCaseOfError(): void
     {
         $callCount = 0;

@@ -6,6 +6,8 @@ namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
 use League\Event\EventDispatcher;
 use Mezzio\Swoole\Event\EventDispatcherInterface as SwooleEventDispatcherInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -27,10 +29,7 @@ class EventDispatcherAggregateFactoryTest extends TestCase
         $this->ed = new EventDispatcher();
     }
 
-    /**
-     * @test
-     * @dataProvider provideConfigs
-     */
+    #[Test, DataProvider('provideConfigs')]
     public function createsAsyncDispatcherWhenNotFoundInContainer(array $config): void
     {
         $this->container->expects($this->once())->method('has')->with(
@@ -63,7 +62,7 @@ class EventDispatcherAggregateFactoryTest extends TestCase
         ($this->factory)($this->container);
     }
 
-    public function provideConfigs(): iterable
+    public static function provideConfigs(): iterable
     {
         yield 'empty config' => [[]];
         yield 'non-empty config' => [['events' => []]];

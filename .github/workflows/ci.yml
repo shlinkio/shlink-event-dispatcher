@@ -11,5 +11,6 @@ jobs:
     uses: shlinkio/github-actions/.github/workflows/php-lib-ci.yml@main
     with:
       extra-extensions: openswoole-4.12.0
+      coverage-driver: pcov
     secrets:
       INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}

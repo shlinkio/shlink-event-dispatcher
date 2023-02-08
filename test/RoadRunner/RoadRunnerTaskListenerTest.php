@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
 use JsonSerializable;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerTaskListener;
@@ -26,10 +28,7 @@ class RoadRunnerTaskListenerTest extends TestCase
         $this->listener = new RoadRunnerTaskListener($this->jobs, $this->listenerServiceName);
     }
 
-    /**
-     * @test
-     * @dataProvider provideEvents
-     */
+    #[Test, DataProvider('provideEvents')]
     public function expectedTaskIsDispatchedBasedOnProvidedEvent(object $event, array $expectedPayload): void
     {
         $queue = $this->createMock(QueueInterface::class);
@@ -47,7 +46,7 @@ class RoadRunnerTaskListenerTest extends TestCase
         ($this->listener)($event);
     }
 
-    public function provideEvents(): iterable
+    public static function provideEvents(): iterable
     {
         yield [new stdClass(), []];
         yield [
