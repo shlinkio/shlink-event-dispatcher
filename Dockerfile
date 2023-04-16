@@ -1,6 +1,6 @@
 FROM composer:2
 
-ENV OPENSWOOLE_VERSION 4.12.1
+ENV OPENSWOOLE_VERSION 22.0.0
 
 RUN apk add --no-cache openssl openssl-dev linux-headers
 RUN apk add --no-cache libpng-dev libpng libjpeg-turbo-dev libwebp-dev zlib-dev libxpm-dev
