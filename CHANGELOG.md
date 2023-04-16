@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 ### Changed
 * Migrated infection config to json5.
 * Migrated from prophecy to PHPUnit mocks.
-* Migrated to PHPUnit 10.
+* Updated to PHPUnit 10 and migrate to PHPUnit 10.1 config format.
 
 ### Deprecated
 * *Nothing*

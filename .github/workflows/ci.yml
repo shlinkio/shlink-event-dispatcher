@@ -10,6 +10,6 @@ jobs:
   ci:
     uses: shlinkio/github-actions/.github/workflows/php-lib-ci.yml@main
     with:
-      extra-extensions: openswoole-4.12.1
+      extra-extensions: openswoole-22.0.0
     secrets:
       INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}
