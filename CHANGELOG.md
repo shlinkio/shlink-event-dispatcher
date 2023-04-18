@@ -9,12 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 * *Nothing*
 
 ### Changed
+* Migrated to roadrunner-jobs 4.0
 * Migrated infection config to json5.
 * Migrated from prophecy to PHPUnit mocks.
 * Updated to PHPUnit 10 and migrate to PHPUnit 10.1 config format.
 
 ### Deprecated
-* *Nothing*
+* Dropped support for roadrunner-jobs 2.x
 
 ### Removed
 * *Nothing*

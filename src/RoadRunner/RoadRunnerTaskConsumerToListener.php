@@ -11,6 +11,7 @@ use Spiral\RoadRunner\Jobs\ConsumerInterface;
 use Throwable;
 
 use function is_subclass_of;
+use function Shlinkio\Shlink\Json\json_decode;
 
 class RoadRunnerTaskConsumerToListener
 {
@@ -36,7 +37,7 @@ class RoadRunnerTaskConsumerToListener
                     continue;
                 }
 
-                ['listenerServiceName' => $listener, 'eventPayload' => $payload] = $task->getPayload();
+                ['listenerServiceName' => $listener, 'eventPayload' => $payload] = json_decode($task->getPayload());
                 $this->container->get($listener)($event::fromPayload($payload));
                 $task->complete();
             } catch (Throwable $e) {

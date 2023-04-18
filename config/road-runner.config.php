@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Shlinkio\Shlink\EventDispatcher\RoadRunner;
 
 use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Spiral\Goridge\RPC\RPC;
+use Spiral\RoadRunner\Environment;
 use Spiral\RoadRunner\Jobs\Consumer;
 use Spiral\RoadRunner\Jobs\Jobs;
-use Spiral\RoadRunner\Jobs\Serializer\JsonSerializer;
 use Spiral\RoadRunner\Worker;
 use Spiral\RoadRunner\WorkerInterface;
 
@@ -25,10 +25,18 @@ return [
                     $c,
                     $c->get(LoggerInterface::class),
                 ),
-            JsonSerializer::class => InvokableFactory::class,
-            Worker::class => static fn () => Worker::create(),
-            Jobs::class => static fn (ContainerInterface $c) => new Jobs(null, $c->get(JsonSerializer::class)),
+
+            Environment::class => static fn () => Environment::fromGlobals(),
+
+            Jobs::class => ConfigAbstractFactory::class,
+            RPC::class => static fn (ContainerInterface $c) => RPC::create(
+                $c->get(Environment::class)->getRPCAddress(),
+            ),
+
             Consumer::class => ConfigAbstractFactory::class,
+            Worker::class => static fn (ContainerInterface $c) => Worker::createFromEnvironment(
+                $c->get(Environment::class),
+            ),
         ],
         'aliases' => [
             WorkerInterface::class => Worker::class,
@@ -36,7 +44,8 @@ return [
     ],
 
     ConfigAbstractFactory::class => [
-        Consumer::class => [Worker::class, JsonSerializer::class],
+        Jobs::class => [RPC::class],
+        Consumer::class => [Worker::class],
     ],
 
 ];
