@@ -7,6 +7,8 @@ namespace Shlinkio\Shlink\EventDispatcher\RoadRunner;
 use JsonSerializable;
 use Spiral\RoadRunner\Jobs\JobsInterface;
 
+use function Shlinkio\Shlink\Json\json_encode;
+
 class RoadRunnerTaskListener
 {
     private const SHLINK_QUEUE = 'shlink';
@@ -18,10 +20,10 @@ class RoadRunnerTaskListener
     public function __invoke(object $event): void
     {
         $queue = $this->jobs->connect(self::SHLINK_QUEUE);
-        $task = $queue->create($event::class, [
+        $task = $queue->create($event::class, json_encode([
             'listenerServiceName' => $this->listenerServiceName,
-            'eventPayload' => $event instanceof JsonSerializable ? $event->jsonSerialize() : [],
-        ]);
+            'eventPayload' => $event instanceof JsonSerializable ? $event : [],
+        ]));
         $queue->dispatch($task);
     }
 }

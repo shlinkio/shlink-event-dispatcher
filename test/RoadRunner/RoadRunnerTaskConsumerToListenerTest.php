@@ -16,6 +16,8 @@ use ShlinkioTest\Shlink\EventDispatcher\Util\DummyJsonDeserializable;
 use Spiral\RoadRunner\Jobs\ConsumerInterface;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
+use function Shlinkio\Shlink\Json\json_encode;
+
 class RoadRunnerTaskConsumerToListenerTest extends TestCase
 {
     private RoadRunnerTaskConsumerToListener $taskConsumer;
@@ -61,10 +63,10 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
         $callCount = 0;
         $task = $this->createMock(ReceivedTaskInterface::class);
         $task->method('getName')->willReturn(DummyJsonDeserializable::class);
-        $task->method('getPayload')->willReturn([
+        $task->method('getPayload')->willReturn(json_encode([
             'listenerServiceName' => 'my_listener',
             'eventPayload' => [],
-        ]);
+        ]));
         $task->expects($this->once())->method('complete');
         $task->expects($this->never())->method('fail');
         $this->consumer->expects($this->exactly(2))->method('waitTask')->willReturnCallback(
@@ -86,10 +88,10 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
         $callCount = 0;
         $task = $this->createMock(ReceivedTaskInterface::class);
         $task->method('getName')->willReturn(DummyJsonDeserializable::class);
-        $task->method('getPayload')->willReturn([
+        $task->method('getPayload')->willReturn(json_encode([
             'listenerServiceName' => 'my_listener',
             'eventPayload' => [],
-        ]);
+        ]));
         $task->expects($this->never())->method('complete');
         $task->expects($this->once())->method('fail')->with($this->isInstanceOf(RuntimeException::class));
         $this->consumer->expects($this->exactly(2))->method('waitTask')->willReturnCallback(

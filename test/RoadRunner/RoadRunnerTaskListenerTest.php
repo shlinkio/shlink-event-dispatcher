@@ -16,6 +16,8 @@ use Spiral\RoadRunner\Jobs\Task\PreparedTaskInterface;
 use Spiral\RoadRunner\Jobs\Task\QueuedTaskInterface;
 use stdClass;
 
+use function Shlinkio\Shlink\Json\json_encode;
+
 class RoadRunnerTaskListenerTest extends TestCase
 {
     private RoadRunnerTaskListener $listener;
@@ -35,10 +37,10 @@ class RoadRunnerTaskListenerTest extends TestCase
         $task = $this->createMock(PreparedTaskInterface::class);
 
         $this->jobs->expects($this->once())->method('connect')->with('shlink')->willReturn($queue);
-        $queue->expects($this->once())->method('create')->with($event::class, [
+        $queue->expects($this->once())->method('create')->with($event::class, json_encode([
             'listenerServiceName' => $this->listenerServiceName,
             'eventPayload' => $expectedPayload,
-        ])->willReturn($task);
+        ]))->willReturn($task);
         $queue->expects($this->once())->method('dispatch')->with($task)->willReturn(
             $this->createMock(QueuedTaskInterface::class),
         );
