@@ -26,7 +26,7 @@ class SwooleListenersProviderDelegator
 
         foreach ($asyncEvents as $eventName => $listeners) {
             foreach ($listeners as $listenerName) {
-                if (! $checker->shouldRegisterListener($eventName, $listenerName, $container)) {
+                if (! $checker->shouldRegisterListener($eventName, $listenerName, true)) {
                     continue;
                 }
 

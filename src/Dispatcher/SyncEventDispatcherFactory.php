@@ -38,7 +38,7 @@ class SyncEventDispatcherFactory
 
         foreach ($events as $eventName => $listeners) {
             foreach ($listeners as $listener) {
-                if (! $checker->shouldRegisterListener($eventName, $listener, $container)) {
+                if (! $checker->shouldRegisterListener($eventName, $listener, false)) {
                     continue;
                 }
 

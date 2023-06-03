@@ -13,7 +13,6 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Shlinkio\Shlink\EventDispatcher\Listener\EnabledListenerCheckerInterface;
 use Shlinkio\Shlink\EventDispatcher\Swoole\SwooleListenersProviderDelegator;
 use stdClass;
@@ -123,12 +122,9 @@ class SwooleListenersProviderDelegatorTest extends TestCase
                 ],
             ]],
             [EnabledListenerCheckerInterface::class, new class implements EnabledListenerCheckerInterface {
-                public function shouldRegisterListener(
-                    string $event,
-                    string $listener,
-                    ContainerInterface $container,
-                ): bool {
-                    return $listener === 'foo';
+                public function shouldRegisterListener(string $event, string $listener, bool $isAsync): bool
+                {
+                    return $isAsync && $listener === 'foo';
                 }
             }],
         ]);

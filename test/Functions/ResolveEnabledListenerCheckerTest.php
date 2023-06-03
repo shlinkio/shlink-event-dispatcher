@@ -40,7 +40,7 @@ class ResolveEnabledListenerCheckerTest extends TestCase
     public static function provideContainerConfigs(): iterable
     {
         $validChecker = new class implements EnabledListenerCheckerInterface {
-            public function shouldRegisterListener(string $event, string $listener, ContainerInterface $container): bool
+            public function shouldRegisterListener(string $event, string $listener, bool $isAsync): bool
             {
                 return false;
             }

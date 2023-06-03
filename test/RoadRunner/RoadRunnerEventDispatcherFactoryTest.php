@@ -58,12 +58,9 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         putenv('RR_MODE=http');
 
         $container = $this->container(new class implements EnabledListenerCheckerInterface {
-            public function shouldRegisterListener(
-                string $event,
-                string $listener,
-                ContainerInterface $container,
-            ): bool {
-                return $listener === 'foo';
+            public function shouldRegisterListener(string $event, string $listener, bool $isAsync): bool
+            {
+                return $isAsync && $listener === 'foo';
             }
         });
 
