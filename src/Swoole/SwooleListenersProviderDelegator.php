@@ -12,6 +12,9 @@ use Psr\Container\ContainerInterface;
 use function Shlinkio\Shlink\EventDispatcher\lazyListener;
 use function Shlinkio\Shlink\EventDispatcher\resolveEnabledListenerChecker;
 
+/**
+ * @deprecated To be removed with Shlink 4.0.0
+ */
 class SwooleListenersProviderDelegator
 {
     public function __invoke(ContainerInterface $container, string $s, callable $factory): SwooleListenerProvider

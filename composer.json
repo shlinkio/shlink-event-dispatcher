@@ -2,7 +2,7 @@
     "name": "shlinkio/shlink-event-dispatcher",
     "type": "library",
     "homepage": "https://shlink.io",
-    "description": "Simplifies registering async and regular PSR-14 event listeners while using mezzio-swoole.",
+    "description": "Simplifies registering async and regular PSR-14 event listeners while using RoadRunner or openswoole.",
     "license": "MIT",
     "authors": [
         {

@@ -13,6 +13,8 @@ class EventDispatcherAggregateFactory
 {
     public function __invoke(ContainerInterface $container): EventDispatcherAggregate
     {
+        // TODO For Shlink 4.0.0
+        // $asyncDispatcher = $container->get(RoadRunnerEventDispatcherFactory::ROAD_RUNNER_DISPATCHER)
         $asyncDispatcher = $this->resolveAsyncDispatcher($container);
         $regularDispatcher = $container->get(SyncEventDispatcherFactory::SYNC_DISPATCHER);
         $eventsConfig = $container->get('config')['events'] ?? [];
@@ -20,6 +22,9 @@ class EventDispatcherAggregateFactory
         return new EventDispatcherAggregate($asyncDispatcher, $regularDispatcher, $eventsConfig);
     }
 
+    /**
+     * @deprecated
+     */
     private function resolveAsyncDispatcher(ContainerInterface $container): EventDispatcherInterface
     {
         if (! $container->has(SwooleEventDispatcherInterface::class)) {

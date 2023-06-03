@@ -9,6 +9,8 @@ use Mezzio\Swoole\Event\TaskFinishEvent;
 use Mezzio\Swoole\Task\TaskInvokerListener;
 use Psr\Log\LoggerInterface;
 
+// Deprecated. Remove for Shlink 4.0.0
+
 return [
 
     'mezzio-swoole' => [
