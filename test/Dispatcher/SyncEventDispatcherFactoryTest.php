@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
+use League\Event\EventDispatcher;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -33,11 +34,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
         $this->container->expects($this->once())->method('get')->with('config')->willReturn($config);
 
         $dispatcher = ($this->factory)($this->container);
-
-        $ref = new ReflectionObject($dispatcher);
-        $prop = $ref->getProperty('listenerProvider');
-        $prop->setAccessible(true);
-        $provider = $prop->getValue($dispatcher);
+        $provider = $this->resolveListenerProvider($dispatcher);
 
         $assertListeners($provider);
     }
@@ -125,5 +122,14 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 Assert::assertCount(3, [...$provider->getListenersForEvent(new Event())]);
             },
         ];
+    }
+
+    private function resolveListenerProvider(EventDispatcher $dispatcher): ListenerProviderInterface
+    {
+        $ref = new ReflectionObject($dispatcher);
+        $prop = $ref->getProperty('listenerProvider');
+        $prop->setAccessible(true);
+
+        return $prop->getValue($dispatcher);
     }
 }

@@ -9,6 +9,7 @@ use League\Event\PrioritizedListenerRegistry;
 use Psr\Container\ContainerInterface;
 
 use function Shlinkio\Shlink\EventDispatcher\lazyListener;
+use function Shlinkio\Shlink\EventDispatcher\resolveEnabledListenerChecker;
 
 class SyncEventDispatcherFactory
 {
@@ -33,8 +34,14 @@ class SyncEventDispatcherFactory
         ContainerInterface $container,
         array $events,
     ): void {
+        $checker = resolveEnabledListenerChecker($container);
+
         foreach ($events as $eventName => $listeners) {
             foreach ($listeners as $listener) {
+                if (! $checker->shouldRegisterListener($eventName, $listener, $container)) {
+                    continue;
+                }
+
                 $provider->subscribeTo($eventName, lazyListener($container, $listener));
             }
         }
