@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
+use League\Event\EventDispatcher;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -13,6 +14,7 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use ReflectionObject;
 use Shlinkio\Shlink\EventDispatcher\Dispatcher\SyncEventDispatcherFactory;
+use Shlinkio\Shlink\EventDispatcher\Listener\EnabledListenerCheckerInterface;
 use stdClass;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -33,11 +35,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
         $this->container->expects($this->once())->method('get')->with('config')->willReturn($config);
 
         $dispatcher = ($this->factory)($this->container);
-
-        $ref = new ReflectionObject($dispatcher);
-        $prop = $ref->getProperty('listenerProvider');
-        $prop->setAccessible(true);
-        $provider = $prop->getValue($dispatcher);
+        $provider = $this->resolveListenerProvider($dispatcher);
 
         $assertListeners($provider);
     }
@@ -125,5 +123,47 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 Assert::assertCount(3, [...$provider->getListenersForEvent(new Event())]);
             },
         ];
+    }
+
+    #[Test]
+    public function skipsListenersWhenEnabledListenerCheckerIsRegistered(): void
+    {
+        $this->container->method('has')->with(EnabledListenerCheckerInterface::class)->willReturn(true);
+        $this->container->method('get')->willReturnMap([
+            ['config', [
+                'events' => [
+                    'regular' => [
+                        stdClass::class => [
+                            'foo',
+                            'bar',
+                            'foo2',
+                        ],
+                    ],
+                ],
+            ]],
+            [EnabledListenerCheckerInterface::class, new class implements EnabledListenerCheckerInterface {
+                public function shouldRegisterListener(
+                    string $event,
+                    string $listener,
+                    ContainerInterface $container,
+                ): bool {
+                    return $listener === 'foo';
+                }
+            }],
+        ]);
+
+        $dispatcher = ($this->factory)($this->container);
+        $provider = $this->resolveListenerProvider($dispatcher);
+
+        Assert::assertCount(1, [...$provider->getListenersForEvent(new stdClass())]);
+    }
+
+    private function resolveListenerProvider(EventDispatcher $dispatcher): ListenerProviderInterface
+    {
+        $ref = new ReflectionObject($dispatcher);
+        $prop = $ref->getProperty('listenerProvider');
+        $prop->setAccessible(true);
+
+        return $prop->getValue($dispatcher);
     }
 }

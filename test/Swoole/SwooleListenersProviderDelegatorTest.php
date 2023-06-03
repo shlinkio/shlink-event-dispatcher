@@ -13,10 +13,10 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
+use Shlinkio\Shlink\EventDispatcher\Listener\EnabledListenerCheckerInterface;
 use Shlinkio\Shlink\EventDispatcher\Swoole\SwooleListenersProviderDelegator;
 use stdClass;
-
-use function iterator_to_array;
 
 class SwooleListenersProviderDelegatorTest extends TestCase
 {
@@ -51,7 +51,7 @@ class SwooleListenersProviderDelegatorTest extends TestCase
                 $container->expects(new InvokedCount(0))->method('addDelegator');
             },
             static function (SwooleListenerProvider $provider): void {
-                Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
+                Assert::assertEmpty([...$provider->getListenersForEvent(new stdClass())]);
             },
         ];
         yield 'empty events' => [
@@ -60,7 +60,7 @@ class SwooleListenersProviderDelegatorTest extends TestCase
                 $container->expects(new InvokedCount(0))->method('addDelegator');
             },
             static function (SwooleListenerProvider $provider): void {
-                Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
+                Assert::assertEmpty([...$provider->getListenersForEvent(new stdClass())]);
             },
         ];
         yield 'no async events' => [
@@ -76,7 +76,7 @@ class SwooleListenersProviderDelegatorTest extends TestCase
                 $container->expects(new InvokedCount(0))->method('addDelegator');
             },
             static function (SwooleListenerProvider $provider): void {
-                Assert::assertEmpty(iterator_to_array($provider->getListenersForEvent(new stdClass())));
+                Assert::assertEmpty([...$provider->getListenersForEvent(new stdClass())]);
             },
         ];
         yield 'async events' => [
@@ -100,8 +100,40 @@ class SwooleListenersProviderDelegatorTest extends TestCase
                 );
             },
             static function (SwooleListenerProvider $provider): void {
-                Assert::assertCount(2, iterator_to_array($provider->getListenersForEvent(new stdClass())));
+                Assert::assertCount(2, [...$provider->getListenersForEvent(new stdClass())]);
             },
         ];
+    }
+
+    #[Test]
+    public function skipsListenersWhenEnabledListenerCheckerIsRegistered(): void
+    {
+        $this->container->method('has')->with(EnabledListenerCheckerInterface::class)->willReturn(true);
+        $this->container->method('get')->willReturnMap([
+            ['config', [
+                'events' => [
+                    'async' => [
+                        stdClass::class => [
+                            'foo',
+                            'bar',
+                            'foo2',
+                        ],
+                    ],
+                ],
+            ]],
+            [EnabledListenerCheckerInterface::class, new class implements EnabledListenerCheckerInterface {
+                public function shouldRegisterListener(
+                    string $event,
+                    string $listener,
+                    ContainerInterface $container,
+                ): bool {
+                    return $listener === 'foo';
+                }
+            }],
+        ]);
+
+        $provider = ($this->delegator)($this->container, '', fn () => new SwooleListenerProvider());
+
+        Assert::assertCount(1, [...$provider->getListenersForEvent(new stdClass())]);
     }
 }

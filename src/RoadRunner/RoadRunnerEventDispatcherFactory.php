@@ -10,6 +10,7 @@ use Psr\Container\ContainerInterface;
 use Spiral\RoadRunner\Jobs\Jobs;
 
 use function Shlinkio\Shlink\Config\env;
+use function Shlinkio\Shlink\EventDispatcher\resolveEnabledListenerChecker;
 use function Shlinkio\Shlink\EventDispatcher\roadRunnerTaskListener;
 
 class RoadRunnerEventDispatcherFactory
@@ -36,8 +37,14 @@ class RoadRunnerEventDispatcherFactory
         }
 
         $jobs = $container->get(Jobs::class);
+        $checker = resolveEnabledListenerChecker($container);
+
         foreach ($events as $eventName => $listeners) {
             foreach ($listeners as $listener) {
+                if (! $checker->shouldRegisterListener($eventName, $listener, $container)) {
+                    continue;
+                }
+
                 $provider->subscribeTo($eventName, roadRunnerTaskListener($jobs, $listener));
             }
         }

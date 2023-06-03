@@ -10,6 +10,7 @@ use Mezzio\Swoole\Task\DeferredServiceListenerDelegator;
 use Psr\Container\ContainerInterface;
 
 use function Shlinkio\Shlink\EventDispatcher\lazyListener;
+use function Shlinkio\Shlink\EventDispatcher\resolveEnabledListenerChecker;
 
 class SwooleListenersProviderDelegator
 {
@@ -18,9 +19,14 @@ class SwooleListenersProviderDelegator
         /** @var SwooleListenerProvider $provider */
         $provider = $factory();
         $asyncEvents = $container->get('config')['events']['async'] ?? [];
+        $checker = resolveEnabledListenerChecker($container);
 
         foreach ($asyncEvents as $eventName => $listeners) {
             foreach ($listeners as $listenerName) {
+                if (! $checker->shouldRegisterListener($eventName, $listenerName, $container)) {
+                    continue;
+                }
+
                 $provider->addListener($eventName, lazyListener($container, $listenerName));
                 /** @var ServiceManager $container */
                 $container->addDelegator($listenerName, DeferredServiceListenerDelegator::class);

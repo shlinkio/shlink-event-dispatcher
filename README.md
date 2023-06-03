@@ -73,3 +73,30 @@ The `events` config entry has these blocks.
 * `fallback_async_to_regular`: Tells if async event listeners should be dispatched as regular ones in case neither swoole nor openswoole are not installed. It is false by default.
 
 In both cases, listeners are identified by their service name, making the services to be lazily resolved only when their corresponding event gets dispatched.
+
+### Dynamically skip registering listeners
+
+Sometimes you want to provide a base list of listeners for an event, but you may want to skip them from being actually registered based on some logic known only at runtime.
+
+For example, if you have a listener to send events to RabbitMQ, but the feature is optional and a user could have disabled it. In that case you could check at runtime if the feature is disabled, and skip the listener registration.
+
+This module allows a `Shlinkio\Shlink\EventDispatcher\Listener\EnabledListenerCheckerInterface` service to be registered, and if it resolves an instance opf that same type, it will be used to decide if listeners should be registered or not.
+
+The service registered there has to implement this method:
+
+```php
+public function shouldRegisterListener(string $event, string $listener, ContainerInterface $container): bool
+{
+    // Do some logic to determine if $service should be registered for $event
+    // You have access to the service container, in case external resources need to be queried
+    // Then return `true` or `false`
+}
+```
+
+> If the service is not found, or it resolves an instance of the wrong type, a default implementation is used, which registers all listeners.
+> ```php
+> public function shouldRegisterListener(string $event, string $listener, ContainerInterface $container): bool
+> {
+>    return true;
+> }
+> ```

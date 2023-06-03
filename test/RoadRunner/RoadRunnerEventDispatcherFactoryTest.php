@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
-use League\Event\EventDispatcher;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionObject;
+use Shlinkio\Shlink\EventDispatcher\Listener\EnabledListenerCheckerInterface;
 use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerEventDispatcherFactory;
 use Spiral\RoadRunner\Jobs\Jobs;
 use Spiral\RoadRunner\Jobs\JobsInterface;
+use stdClass;
+use Symfony\Contracts\EventDispatcher\Event;
 
 use function putenv;
 use function sprintf;
@@ -21,23 +23,10 @@ use function sprintf;
 class RoadRunnerEventDispatcherFactoryTest extends TestCase
 {
     private RoadRunnerEventDispatcherFactory $factory;
-    private MockObject & ContainerInterface $container;
 
     protected function setUp(): void
     {
         $this->factory = new RoadRunnerEventDispatcherFactory();
-        $this->container = $this->createMock(ContainerInterface::class);
-        $this->container->method('get')->willReturnMap([
-            ['config', [
-                'events' => [
-                    'async' => [
-                        'foo' => ['bar', 'baz'],
-                        'bar' => ['foo'],
-                    ],
-                ],
-            ]],
-            [Jobs::class, $this->createMock(JobsInterface::class)],
-        ]);
     }
 
     protected function tearDown(): void
@@ -50,8 +39,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
     {
         putenv(sprintf('RR_MODE%s', $mode));
 
-        /** @var EventDispatcher $dispatcher */
-        $dispatcher = ($this->factory)($this->container);
+        $dispatcher = ($this->factory)($this->container());
         $listenerProvider = $this->getPrivateProp($dispatcher, 'listenerProvider');
         $listenersPerEvent = $this->getPrivateProp($listenerProvider, 'listenersPerEvent');
 
@@ -64,6 +52,28 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         yield 'rr' => ['=http', 2];
     }
 
+    #[Test]
+    public function skipsListenersWhenEnabledListenerCheckerIsRegistered(): void
+    {
+        putenv('RR_MODE=http');
+
+        $container = $this->container(new class implements EnabledListenerCheckerInterface {
+            public function shouldRegisterListener(
+                string $event,
+                string $listener,
+                ContainerInterface $container,
+            ): bool {
+                return $listener === 'foo';
+            }
+        });
+
+        $dispatcher = ($this->factory)($container);
+        $listenerProvider = $this->getPrivateProp($dispatcher, 'listenerProvider');
+
+        Assert::assertCount(0, [...$listenerProvider->getListenersForEvent(new stdClass())]);
+        Assert::assertCount(1, [...$listenerProvider->getListenersForEvent(new Event())]);
+    }
+
     private function getPrivateProp(object $object, string $propName): mixed
     {
         $ref = new ReflectionObject($object);
@@ -71,5 +81,30 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         $prop->setAccessible(true);
 
         return $prop->getValue($object);
+    }
+
+    private function container(?EnabledListenerCheckerInterface $listenerChecker = null): ContainerInterface
+    {
+        $container = $this->createMock(ContainerInterface::class);
+
+        $getServiceReturnMap = [
+            ['config', [
+                'events' => [
+                    'async' => [
+                        stdClass::class => ['bar', 'baz'],
+                        Event::class => ['foo'],
+                    ],
+                ],
+            ]],
+            [Jobs::class, $this->createMock(JobsInterface::class)],
+        ];
+        if ($listenerChecker !== null) {
+            $container->method('has')->with(EnabledListenerCheckerInterface::class)->willReturn(true);
+            $getServiceReturnMap[] = [EnabledListenerCheckerInterface::class, $listenerChecker];
+        }
+
+        $container->method('get')->willReturnMap($getServiceReturnMap);
+
+        return $container;
     }
 }
