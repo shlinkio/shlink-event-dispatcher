@@ -14,6 +14,7 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use ReflectionObject;
 use Shlinkio\Shlink\EventDispatcher\Dispatcher\SyncEventDispatcherFactory;
+use Shlinkio\Shlink\EventDispatcher\Listener\EnabledListenerCheckerInterface;
 use stdClass;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -122,6 +123,39 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 Assert::assertCount(3, [...$provider->getListenersForEvent(new Event())]);
             },
         ];
+    }
+
+    #[Test]
+    public function skipsListenersWhenEnabledListenerCheckerIsRegistered(): void
+    {
+        $this->container->method('has')->with(EnabledListenerCheckerInterface::class)->willReturn(true);
+        $this->container->method('get')->willReturnMap([
+            ['config', [
+                'events' => [
+                    'regular' => [
+                        stdClass::class => [
+                            'foo',
+                            'bar',
+                            'foo2',
+                        ],
+                    ],
+                ],
+            ]],
+            [EnabledListenerCheckerInterface::class, new class implements EnabledListenerCheckerInterface {
+                public function shouldRegisterListener(
+                    string $event,
+                    string $listener,
+                    ContainerInterface $container,
+                ): bool {
+                    return $listener === 'foo';
+                }
+            }],
+        ]);
+
+        $dispatcher = ($this->factory)($this->container);
+        $provider = $this->resolveListenerProvider($dispatcher);
+
+        Assert::assertCount(1, [...$provider->getListenersForEvent(new stdClass())]);
     }
 
     private function resolveListenerProvider(EventDispatcher $dispatcher): ListenerProviderInterface
