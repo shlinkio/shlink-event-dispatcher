@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Shlinkio\Shlink\EventDispatcher\Swoole\TaskFinishListener;
 
+/** @deprecated */
 class TaskFinishListenerTest extends TestCase
 {
     private TaskFinishListener $listener;

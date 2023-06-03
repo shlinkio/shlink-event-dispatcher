@@ -7,6 +7,9 @@ namespace Shlinkio\Shlink\EventDispatcher\Swoole;
 use Mezzio\Swoole\Event\TaskFinishEvent;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated To be removed with Shlink 4.0.0
+ */
 class TaskFinishListener
 {
     public function __construct(private readonly LoggerInterface $logger)

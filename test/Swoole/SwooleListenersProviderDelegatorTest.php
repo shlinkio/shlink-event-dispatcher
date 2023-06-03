@@ -18,6 +18,7 @@ use Shlinkio\Shlink\EventDispatcher\Listener\EnabledListenerCheckerInterface;
 use Shlinkio\Shlink\EventDispatcher\Swoole\SwooleListenersProviderDelegator;
 use stdClass;
 
+/** @deprecated */
 class SwooleListenersProviderDelegatorTest extends TestCase
 {
     private SwooleListenersProviderDelegator $delegator;
