@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "league/event": "^3.0",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^3.0",
@@ -20,16 +20,16 @@
         "shlinkio/shlink-json": "^1.0"
     },
     "require-dev": {
-        "infection/infection": "^0.27",
-        "mezzio/mezzio-swoole": "^4.6",
+        "infection/infection": "^0.27.7",
+        "mezzio/mezzio-swoole": "^4.8",
         "openswoole/ide-helper": "~22.0.1",
         "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-phpunit": "^1.3",
-        "phpunit/phpunit": "^10.1",
+        "phpunit/phpunit": "^10.4",
         "roave/security-advisories": "dev-master",
         "shlinkio/php-coding-standard": "~2.3.0",
-        "spiral/roadrunner-jobs": "^4.0",
-        "symfony/var-dumper": "^6.2"
+        "spiral/roadrunner-jobs": "^4.2",
+        "symfony/var-dumper": "^6.3"
     },
     "suggest": {
         "mezzio/mezzio-swoole": "To be able to run async event dispatchers as swoole tasks",
