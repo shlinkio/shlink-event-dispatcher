@@ -19,12 +19,8 @@ class SyncEventDispatcherFactory
     {
         $provider = new PrioritizedListenerRegistry();
         $eventsConfig = $container->get('config')['events'] ?? [];
-        $fallback = $eventsConfig['fallback_async_to_regular'] ?? false;
 
         $this->registerEvents($provider, $container, $eventsConfig['regular'] ?? []);
-        if ($fallback) {
-            $this->registerEvents($provider, $container, $eventsConfig['async'] ?? []);
-        }
 
         return new EventDispatcher($provider);
     }

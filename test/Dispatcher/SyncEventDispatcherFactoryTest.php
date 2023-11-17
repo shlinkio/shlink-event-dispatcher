@@ -101,28 +101,6 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 Assert::assertEmpty([...$provider->getListenersForEvent(new Event())]);
             },
         ];
-        yield 'non-empty regular events and async with fallback' => [
-            ['events' => [
-                'regular' => [
-                    stdClass::class => [
-                        'foo',
-                        'bar',
-                    ],
-                ],
-                'async' => [
-                    Event::class => [
-                        'foo',
-                        'bar',
-                        'baz',
-                    ],
-                ],
-                'fallback_async_to_regular' => true,
-            ]],
-            static function (ListenerProviderInterface $provider): void {
-                Assert::assertCount(2, [...$provider->getListenersForEvent(new stdClass())]);
-                Assert::assertCount(3, [...$provider->getListenersForEvent(new Event())]);
-            },
-        ];
     }
 
     #[Test]

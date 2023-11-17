@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 * Drop support for PHP 8.1
 
 ### Fixed
-* *Nothing*
+* Fix EventDispatcherAggregate, making sure it dispatches both regular and async listeners if the event is registered for both
 
 
 ## [3.0.0] - 2023-05-23

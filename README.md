@@ -59,8 +59,6 @@ return [
             ],
         ],
 
-        'fallback_async_to_regular' => true, // Defaults to false
-
     ],
 
 ];
@@ -70,7 +68,6 @@ The `events` config entry has these blocks.
 
 * `regular`: A list of events with all the listeners tha should be dispatched synchronously for each one of them.
 * `async`: A list of events with all the listeners that should be executed as RoadRunner jobs or openswoole tasks for each one of them.
-* `fallback_async_to_regular`: Tells if async event listeners should be dispatched as regular ones in case neither RoadRunner nor openswoole are not installed. It is false by default.
 
 In both cases, listeners are identified by their service name, making the services to be lazily resolved only when their corresponding event gets dispatched.
 

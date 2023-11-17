@@ -23,7 +23,7 @@ class EventDispatcherAggregateFactory
     }
 
     /**
-     * @deprecated
+     * @deprecated Use $container->get(RoadRunnerEventDispatcherFactory::ROAD_RUNNER_DISPATCHER) instead
      */
     private function resolveAsyncDispatcher(ContainerInterface $container): EventDispatcherInterface
     {
