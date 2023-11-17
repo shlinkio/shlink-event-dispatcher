@@ -44,7 +44,7 @@ class EventDispatcherAggregateTest extends TestCase
 
     public static function provideEventsConfigs(): iterable
     {
-        yield 'no async events' => [[], 0, 1];
+        yield 'no events' => [[], 0, 0];
         yield 'async events' => [
             ['async' => [
                 stdClass::class => [],
@@ -52,34 +52,23 @@ class EventDispatcherAggregateTest extends TestCase
             1,
             0,
         ];
-        yield 'async events with fallback' => [
-            [
-                'async' => [
-                    stdClass::class => [],
-                ],
-                'fallback_async_to_regular' => true,
-            ],
+        yield 'regular events' => [
+            ['regular' => [
+                stdClass::class => [],
+            ]],
             0,
             1,
         ];
-        yield 'async events with falsy fallback' => [
+        yield 'both events' => [
             [
+                'regular' => [
+                    stdClass::class => [],
+                ],
                 'async' => [
                     stdClass::class => [],
                 ],
-                'fallback_async_to_regular' => 0,
             ],
             1,
-            0,
-        ];
-        yield 'async events with truthy fallback' => [
-            [
-                'async' => [
-                    stdClass::class => [],
-                ],
-                'fallback_async_to_regular' => 'true',
-            ],
-            0,
             1,
         ];
     }
