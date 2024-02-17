@@ -16,7 +16,6 @@ use ReflectionObject;
 use Shlinkio\Shlink\EventDispatcher\Dispatcher\SyncEventDispatcherFactory;
 use Shlinkio\Shlink\EventDispatcher\Listener\EnabledListenerCheckerInterface;
 use stdClass;
-use Symfony\Contracts\EventDispatcher\Event;
 
 class SyncEventDispatcherFactoryTest extends TestCase
 {
@@ -89,7 +88,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
                     ],
                 ],
                 'async' => [
-                    Event::class => [
+                    EventDispatcher::class => [
                         'foo',
                         'bar',
                         'baz',
@@ -98,7 +97,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
             ]],
             static function (ListenerProviderInterface $provider): void {
                 Assert::assertCount(2, [...$provider->getListenersForEvent(new stdClass())]);
-                Assert::assertEmpty([...$provider->getListenersForEvent(new Event())]);
+                Assert::assertEmpty([...$provider->getListenersForEvent(new EventDispatcher())]);
             },
         ];
     }

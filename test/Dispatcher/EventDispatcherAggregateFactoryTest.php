@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
 use League\Event\EventDispatcher;
-use Mezzio\Swoole\Event\EventDispatcherInterface as SwooleEventDispatcherInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -30,31 +29,10 @@ class EventDispatcherAggregateFactoryTest extends TestCase
     }
 
     #[Test, DataProvider('provideConfigs')]
-    public function createsAsyncDispatcherWhenNotFoundInContainer(array $config): void
+    public function fetchesAsyncDispatcherFromContainer(array $config): void
     {
-        $this->container->expects($this->once())->method('has')->with(
-            SwooleEventDispatcherInterface::class,
-        )->willReturn(false);
         $this->container->expects($this->exactly(3))->method('get')->willReturnMap([
             [RoadRunnerEventDispatcherFactory::ROAD_RUNNER_DISPATCHER, $this->ed],
-            [SyncEventDispatcherFactory::SYNC_DISPATCHER, $this->ed],
-            ['config', $config],
-        ]);
-
-        ($this->factory)($this->container);
-    }
-
-    /**
-     * @test
-     * @dataProvider provideConfigs
-     */
-    public function fetchesAsyncDispatcherFromContainerWhenFound(array $config): void
-    {
-        $this->container->expects($this->once())->method('has')->with(
-            SwooleEventDispatcherInterface::class,
-        )->willReturn(true);
-        $this->container->expects($this->exactly(3))->method('get')->willReturnMap([
-            [SwooleEventDispatcherInterface::class, $this->ed],
             [SyncEventDispatcherFactory::SYNC_DISPATCHER, $this->ed],
             ['config', $config],
         ]);

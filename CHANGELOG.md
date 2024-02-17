@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 * *Nothing*
 
 ### Fixed
-* *Nothing*
+* Remove support for openswoole
 
 
 ## [3.1.0] - 2023-11-25

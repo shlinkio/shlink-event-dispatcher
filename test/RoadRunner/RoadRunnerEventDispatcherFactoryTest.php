@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
+use League\Event\EventDispatcher;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -15,7 +16,6 @@ use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerEventDispatcherFactory;
 use Spiral\RoadRunner\Jobs\Jobs;
 use Spiral\RoadRunner\Jobs\JobsInterface;
 use stdClass;
-use Symfony\Contracts\EventDispatcher\Event;
 
 use function putenv;
 use function sprintf;
@@ -68,7 +68,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         $listenerProvider = $this->getPrivateProp($dispatcher, 'listenerProvider');
 
         Assert::assertCount(0, [...$listenerProvider->getListenersForEvent(new stdClass())]);
-        Assert::assertCount(1, [...$listenerProvider->getListenersForEvent(new Event())]);
+        Assert::assertCount(1, [...$listenerProvider->getListenersForEvent(new EventDispatcher())]);
     }
 
     private function getPrivateProp(object $object, string $propName): mixed
@@ -89,7 +89,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
                 'events' => [
                     'async' => [
                         stdClass::class => ['bar', 'baz'],
-                        Event::class => ['foo'],
+                        EventDispatcher::class => ['foo'],
                     ],
                 ],
             ]],
