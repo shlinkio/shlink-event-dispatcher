@@ -16,7 +16,7 @@
         "league/event": "^3.0",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^3.0",
-        "shlinkio/shlink-config": "^2.5",
+        "shlinkio/shlink-config": "^3.0 || ^2.5",
         "shlinkio/shlink-json": "^1.0"
     },
     "require-dev": {
