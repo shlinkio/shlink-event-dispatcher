@@ -10,15 +10,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 
 ### Changed
 * Update dependencies
+* Update to PHPUnit 11
 
 ### Deprecated
 * *Nothing*
 
 ### Removed
-* *Nothing*
+* Remove support for openswoole
+* Remove infection and mutation tests
 
 ### Fixed
-* Remove support for openswoole
+* *Nothing*
 
 
 ## [3.1.0] - 2023-11-25
