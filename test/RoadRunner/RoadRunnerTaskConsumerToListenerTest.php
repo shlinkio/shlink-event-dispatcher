@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -58,7 +59,10 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
     }
 
     #[Test]
-    public function listenerIsLoadedAndInvoked(): void
+    #[TestWith(['123'])]
+    #[TestWith(['456'])]
+    #[TestWith(['abc'])]
+    public function listenerIsLoadedAndInvoked(string $requestId): void
     {
         $callCount = 0;
         $task = $this->createMock(ReceivedTaskInterface::class);
@@ -66,7 +70,7 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
         $task->method('getPayload')->willReturn(json_encode([
             'listenerServiceName' => 'my_listener',
             'eventPayload' => [],
-            'requestId' => '123',
+            'requestId' => $requestId,
         ]));
         $task->expects($this->once())->method('complete');
         $task->expects($this->never())->method('fail');
@@ -80,7 +84,12 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
         });
         $this->logger->expects($this->never())->method('warning');
 
-        $this->taskConsumer->listenForTasks();
+        $providedRequestId = null;
+        $this->taskConsumer->listenForTasks(function (string $id) use (&$providedRequestId): void {
+            $providedRequestId = $id;
+        });
+
+        self::assertEquals($requestId, $providedRequestId);
     }
 
     #[Test]

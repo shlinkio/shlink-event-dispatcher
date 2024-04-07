@@ -23,7 +23,7 @@ readonly class RoadRunnerTaskConsumerToListener
     }
 
     /**
-     * @param callable(string): void|null $setCurrentRequestId
+     * @param (callable(string): void)|null $setCurrentRequestId
      */
     public function listenForTasks(?callable $setCurrentRequestId = null): void
     {
@@ -41,7 +41,7 @@ readonly class RoadRunnerTaskConsumerToListener
                 }
 
                 [
-                    'listenerServiceName' => $listener,
+                    'listenerServiceName' => $listenerService,
                     'eventPayload' => $payload,
                     'requestId' => $requestId,
                 ] = json_decode($task->getPayload());
@@ -49,7 +49,7 @@ readonly class RoadRunnerTaskConsumerToListener
                     $setCurrentRequestId($requestId);
                 }
 
-                $this->container->get($listener)($event::fromPayload($payload));
+                $this->container->get($listenerService)($event::fromPayload($payload));
                 $task->complete();
             } catch (Throwable $e) {
                 $task->fail($e);
