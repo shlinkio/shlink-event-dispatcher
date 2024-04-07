@@ -8,11 +8,13 @@ use League\Event\EventDispatcher;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionObject;
 use Shlinkio\Shlink\EventDispatcher\Listener\EnabledListenerCheckerInterface;
 use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerEventDispatcherFactory;
+use Shlinkio\Shlink\EventDispatcher\Util\RequestIdProviderInterface;
 use Spiral\RoadRunner\Jobs\Jobs;
 use Spiral\RoadRunner\Jobs\JobsInterface;
 use stdClass;
@@ -53,7 +55,9 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
     }
 
     #[Test]
-    public function skipsListenersWhenEnabledListenerCheckerIsRegistered(): void
+    #[TestWith([true])]
+    #[TestWith([false])]
+    public function skipsListenersWhenEnabledListenerCheckerIsRegistered(bool $hasRequestIdProvider): void
     {
         putenv('RR_MODE=http');
 
@@ -62,7 +66,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
             {
                 return $isAsync && $listener === 'foo';
             }
-        });
+        }, hasRequestIdProvider: $hasRequestIdProvider);
 
         $dispatcher = ($this->factory)($container);
         $listenerProvider = $this->getPrivateProp($dispatcher, 'listenerProvider');
@@ -80,10 +84,11 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         return $prop->getValue($object);
     }
 
-    private function container(?EnabledListenerCheckerInterface $listenerChecker = null): ContainerInterface
-    {
+    private function container(
+        ?EnabledListenerCheckerInterface $listenerChecker = null,
+        bool $hasRequestIdProvider = false,
+    ): ContainerInterface {
         $container = $this->createMock(ContainerInterface::class);
-
         $getServiceReturnMap = [
             ['config', [
                 'events' => [
@@ -95,12 +100,24 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
             ]],
             [Jobs::class, $this->createMock(JobsInterface::class)],
         ];
+        $hasServiceReturnMap = [
+            [RequestIdProviderInterface::class, $hasRequestIdProvider],
+        ];
+
         if ($listenerChecker !== null) {
-            $container->method('has')->with(EnabledListenerCheckerInterface::class)->willReturn(true);
+            $hasServiceReturnMap[] = [EnabledListenerCheckerInterface::class, true];
             $getServiceReturnMap[] = [EnabledListenerCheckerInterface::class, $listenerChecker];
         }
 
+        if ($hasRequestIdProvider) {
+            $getServiceReturnMap[] = [
+                RequestIdProviderInterface::class,
+                $this->createMock(RequestIdProviderInterface::class),
+            ];
+        }
+
         $container->method('get')->willReturnMap($getServiceReturnMap);
+        $container->method('has')->willReturnMap($hasServiceReturnMap);
 
         return $container;
     }

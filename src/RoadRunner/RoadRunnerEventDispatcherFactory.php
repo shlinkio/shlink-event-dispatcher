@@ -7,6 +7,7 @@ namespace Shlinkio\Shlink\EventDispatcher\RoadRunner;
 use League\Event\EventDispatcher;
 use League\Event\PrioritizedListenerRegistry;
 use Psr\Container\ContainerInterface;
+use Shlinkio\Shlink\EventDispatcher\Util\RequestIdProviderInterface;
 use Spiral\RoadRunner\Jobs\Jobs;
 
 use function Shlinkio\Shlink\Config\env;
@@ -21,8 +22,16 @@ class RoadRunnerEventDispatcherFactory
     {
         $provider = new PrioritizedListenerRegistry();
         $eventsConfig = $container->get('config')['events'] ?? [];
+        $requestIdProvider = $container->has(RequestIdProviderInterface::class)
+            ? $container->get(RequestIdProviderInterface::class)
+            : new class implements RequestIdProviderInterface {
+                public function currentRequestId(): string
+                {
+                    return '-';
+                }
+            };
 
-        $this->registerEvents($provider, $container, $eventsConfig['async'] ?? []);
+        $this->registerEvents($provider, $container, $requestIdProvider, $eventsConfig['async'] ?? []);
 
         return new EventDispatcher($provider);
     }
@@ -30,6 +39,7 @@ class RoadRunnerEventDispatcherFactory
     private function registerEvents(
         PrioritizedListenerRegistry $provider,
         ContainerInterface $container,
+        RequestIdProviderInterface $requestIdProvider,
         array $events,
     ): void {
         if (env('RR_MODE') === null) {
@@ -45,7 +55,7 @@ class RoadRunnerEventDispatcherFactory
                     continue;
                 }
 
-                $provider->subscribeTo($eventName, roadRunnerTaskListener($jobs, $listener));
+                $provider->subscribeTo($eventName, roadRunnerTaskListener($jobs, $listener, $requestIdProvider));
             }
         }
     }
