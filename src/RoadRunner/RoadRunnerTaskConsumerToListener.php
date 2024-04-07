@@ -13,16 +13,19 @@ use Throwable;
 use function is_subclass_of;
 use function Shlinkio\Shlink\Json\json_decode;
 
-class RoadRunnerTaskConsumerToListener
+readonly class RoadRunnerTaskConsumerToListener
 {
     public function __construct(
-        private readonly ConsumerInterface $consumer,
-        private readonly ContainerInterface $container,
-        private readonly LoggerInterface $logger,
+        private ConsumerInterface $consumer,
+        private ContainerInterface $container,
+        private LoggerInterface $logger,
     ) {
     }
 
-    public function listenForTasks(): void
+    /**
+     * @param callable(string): void|null $setCurrentRequestId
+     */
+    public function listenForTasks(?callable $setCurrentRequestId = null): void
     {
         while ($task = $this->consumer->waitTask()) {
             try {
@@ -37,7 +40,15 @@ class RoadRunnerTaskConsumerToListener
                     continue;
                 }
 
-                ['listenerServiceName' => $listener, 'eventPayload' => $payload] = json_decode($task->getPayload());
+                [
+                    'listenerServiceName' => $listener,
+                    'eventPayload' => $payload,
+                    'requestId' => $requestId,
+                ] = json_decode($task->getPayload());
+                if ($setCurrentRequestId !== null) {
+                    $setCurrentRequestId($requestId);
+                }
+
                 $this->container->get($listener)($event::fromPayload($payload));
                 $task->complete();
             } catch (Throwable $e) {

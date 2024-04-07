@@ -66,6 +66,7 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
         $task->method('getPayload')->willReturn(json_encode([
             'listenerServiceName' => 'my_listener',
             'eventPayload' => [],
+            'requestId' => '123',
         ]));
         $task->expects($this->once())->method('complete');
         $task->expects($this->never())->method('fail');
@@ -91,6 +92,7 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
         $task->method('getPayload')->willReturn(json_encode([
             'listenerServiceName' => 'my_listener',
             'eventPayload' => [],
+            'requestId' => '123',
         ]));
         $task->expects($this->never())->method('complete');
         $task->expects($this->once())->method('fail')->with($this->isInstanceOf(RuntimeException::class));

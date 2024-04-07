@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerTaskListener;
+use Shlinkio\Shlink\EventDispatcher\Util\RequestIdProviderInterface;
 use Spiral\RoadRunner\Jobs\JobsInterface;
 use Spiral\RoadRunner\Jobs\QueueInterface;
 use Spiral\RoadRunner\Jobs\Task\PreparedTaskInterface;
@@ -27,7 +28,16 @@ class RoadRunnerTaskListenerTest extends TestCase
     public function setUp(): void
     {
         $this->jobs = $this->createMock(JobsInterface::class);
-        $this->listener = new RoadRunnerTaskListener($this->jobs, $this->listenerServiceName);
+        $this->listener = new RoadRunnerTaskListener(
+            $this->jobs,
+            $this->listenerServiceName,
+            new class implements RequestIdProviderInterface {
+                public function currentRequestId(): string
+                {
+                    return '-';
+                }
+            },
+        );
     }
 
     #[Test, DataProvider('provideEvents')]
@@ -40,6 +50,7 @@ class RoadRunnerTaskListenerTest extends TestCase
         $queue->expects($this->once())->method('create')->with($event::class, json_encode([
             'listenerServiceName' => $this->listenerServiceName,
             'eventPayload' => $expectedPayload,
+            'requestId' => '-',
         ]))->willReturn($task);
         $queue->expects($this->once())->method('dispatch')->with($task)->willReturn(
             $this->createMock(QueuedTaskInterface::class),
