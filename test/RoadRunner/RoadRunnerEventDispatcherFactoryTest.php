@@ -85,7 +85,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
     }
 
     private function container(
-        ?EnabledListenerCheckerInterface $listenerChecker = null,
+        EnabledListenerCheckerInterface|null $listenerChecker = null,
         bool $hasRequestIdProvider = false,
     ): ContainerInterface {
         $container = $this->createMock(ContainerInterface::class);
