@@ -25,7 +25,7 @@ readonly class RoadRunnerTaskConsumerToListener
     /**
      * @param (callable(string): void)|null $setCurrentRequestId
      */
-    public function listenForTasks(?callable $setCurrentRequestId = null): void
+    public function listenForTasks(callable|null $setCurrentRequestId = null): void
     {
         while ($task = $this->consumer->waitTask()) {
             try {

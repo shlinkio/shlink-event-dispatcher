@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 * Update to PHPStan 1.11.
 * Update dependencies.
 * Switch to xdebug for code coverage reports, as pcov is not marking functions as covered
+* Update shlinkio coding standard to v2.4
 
 ### Deprecated
 * *Nothing*
