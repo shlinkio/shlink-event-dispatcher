@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 * *Nothing*
 
 ### Changed
-* Update to PHPStan 1.11.
+* Update to PHPStan 2.0.
 * Update dependencies.
 * Switch to xdebug for code coverage reports, as pcov is not marking functions as covered
 * Update shlinkio coding standard to v2.4
