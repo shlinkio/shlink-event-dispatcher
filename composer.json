@@ -12,21 +12,21 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "league/event": "^3.0",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^3.0",
-        "shlinkio/shlink-config": "^3.3",
+        "shlinkio/shlink-config": "^3.4",
         "shlinkio/shlink-json": "^1.2"
     },
     "require-dev": {
-        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0",
-        "phpunit/phpunit": "^11.4",
+        "phpunit/phpunit": "^11.5",
         "roave/security-advisories": "dev-master",
         "shlinkio/php-coding-standard": "~2.4.0",
         "spiral/roadrunner-jobs": "^4.6",
-        "symfony/var-dumper": "^7.1"
+        "symfony/var-dumper": "^7.2"
     },
     "suggest": {
         "spiral/roadrunner-jobs": "To be able to run async event dispatchers as roadrunner job tasks"
