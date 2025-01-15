@@ -16,7 +16,7 @@ use function Shlinkio\Shlink\EventDispatcher\roadRunnerTaskListener;
 
 class RoadRunnerEventDispatcherFactory
 {
-    public const ROAD_RUNNER_DISPATCHER = __NAMESPACE__ . '\RoadRunnerEventDispatcher';
+    public const string ROAD_RUNNER_DISPATCHER = __NAMESPACE__ . '\RoadRunnerEventDispatcher';
 
     public function __invoke(ContainerInterface $container): EventDispatcher
     {

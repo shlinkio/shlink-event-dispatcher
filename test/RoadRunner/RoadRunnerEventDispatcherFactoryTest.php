@@ -102,10 +102,10 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         ];
         $hasServiceReturnMap = [
             [RequestIdProviderInterface::class, $hasRequestIdProvider],
+            [EnabledListenerCheckerInterface::class, $listenerChecker !== null],
         ];
 
         if ($listenerChecker !== null) {
-            $hasServiceReturnMap[] = [EnabledListenerCheckerInterface::class, true];
             $getServiceReturnMap[] = [EnabledListenerCheckerInterface::class, $listenerChecker];
         }
 
