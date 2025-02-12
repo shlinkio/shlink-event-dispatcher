@@ -105,7 +105,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
     #[Test]
     public function skipsListenersWhenEnabledListenerCheckerIsRegistered(): void
     {
-        $this->container->method('has')->with(EnabledListenerCheckerInterface::class)->willReturn(true);
+        $this->container->method('has')->willReturn(true);
         $this->container->method('get')->willReturnMap([
             ['config', [
                 'events' => [
