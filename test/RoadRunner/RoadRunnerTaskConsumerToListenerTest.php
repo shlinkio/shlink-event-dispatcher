@@ -15,7 +15,7 @@ use Shlinkio\Shlink\EventDispatcher\RoadRunner\RoadRunnerTaskConsumerToListener;
 use Shlinkio\Shlink\EventDispatcher\Util\JsonUnserializable;
 use ShlinkioTest\Shlink\EventDispatcher\Util\DummyJsonDeserializable;
 use Spiral\RoadRunner\Jobs\ConsumerInterface;
-use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
+use Spiral\RoadRunner\Jobs\Task\ReceivedTask;
 
 use function Shlinkio\Shlink\Json\json_encode;
 
@@ -39,10 +39,10 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
     public function warningIsLoggedWhenEventIsNotDeserializable(): void
     {
         $callCount = 0;
-        $task = $this->createMock(ReceivedTaskInterface::class);
+        $task = $this->createMock(ReceivedTask::class);
         $task->method('getName')->willReturn('not_deserializable');
-        $task->expects($this->once())->method('complete');
-        $task->expects($this->never())->method('fail');
+        $task->expects($this->once())->method('ack');
+        $task->expects($this->never())->method('nack');
         $this->consumer->expects($this->exactly(2))->method('waitTask')->willReturnCallback(
             function () use (&$callCount, $task) {
                 $callCount++;
@@ -65,15 +65,15 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
     public function listenerIsLoadedAndInvoked(string $requestId): void
     {
         $callCount = 0;
-        $task = $this->createMock(ReceivedTaskInterface::class);
+        $task = $this->createMock(ReceivedTask::class);
         $task->method('getName')->willReturn(DummyJsonDeserializable::class);
         $task->method('getPayload')->willReturn(json_encode([
             'listenerServiceName' => 'my_listener',
             'eventPayload' => [],
             'requestId' => $requestId,
         ]));
-        $task->expects($this->once())->method('complete');
-        $task->expects($this->never())->method('fail');
+        $task->expects($this->once())->method('ack');
+        $task->expects($this->never())->method('nack');
         $this->consumer->expects($this->exactly(2))->method('waitTask')->willReturnCallback(
             function () use (&$callCount, $task) {
                 $callCount++;
@@ -96,15 +96,15 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
     public function taskIsFailedInCaseOfError(): void
     {
         $callCount = 0;
-        $task = $this->createMock(ReceivedTaskInterface::class);
+        $task = $this->createMock(ReceivedTask::class);
         $task->method('getName')->willReturn(DummyJsonDeserializable::class);
         $task->method('getPayload')->willReturn(json_encode([
             'listenerServiceName' => 'my_listener',
             'eventPayload' => [],
             'requestId' => '123',
         ]));
-        $task->expects($this->never())->method('complete');
-        $task->expects($this->once())->method('fail')->with($this->isInstanceOf(RuntimeException::class));
+        $task->expects($this->never())->method('ack');
+        $task->expects($this->once())->method('nack')->with($this->isInstanceOf(RuntimeException::class));
         $this->consumer->expects($this->exactly(2))->method('waitTask')->willReturnCallback(
             function () use (&$callCount, $task) {
                 $callCount++;
