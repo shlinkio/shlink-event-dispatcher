@@ -10,16 +10,21 @@ use Shlinkio\Shlink\EventDispatcher\Util\JsonUnserializable;
 use Spiral\RoadRunner\Jobs\ConsumerInterface;
 use Throwable;
 
+use function gc_collect_cycles;
 use function is_subclass_of;
+use function Shlinkio\Shlink\Config\env;
 use function Shlinkio\Shlink\Json\json_decode;
 
 readonly class RoadRunnerTaskConsumerToListener
 {
+    private bool $gcCollectCycles;
+
     public function __construct(
         private ConsumerInterface $consumer,
         private ContainerInterface $container,
         private LoggerInterface $logger,
     ) {
+        $this->gcCollectCycles = env('GC_COLLECT_CYCLES', default: false);
     }
 
     /**
@@ -36,7 +41,7 @@ readonly class RoadRunnerTaskConsumerToListener
                         . 'implement {implements}',
                         ['event' => $event, 'implements' => JsonUnserializable::class],
                     );
-                    $task->complete();
+                    $task->ack();
                     continue;
                 }
 
@@ -50,9 +55,13 @@ readonly class RoadRunnerTaskConsumerToListener
                 }
 
                 $this->container->get($listenerService)($event::fromPayload($payload));
-                $task->complete();
+                $task->ack();
             } catch (Throwable $e) {
-                $task->fail($e);
+                $task->nack($e);
+            } finally {
+                if ($this->gcCollectCycles) {
+                    gc_collect_cycles();
+                }
             }
         }
     }
