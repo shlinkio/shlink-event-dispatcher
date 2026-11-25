@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Listener;
 
+use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,7 @@ class LazyEventListenerTest extends TestCase
     private MockObject&ContainerInterface $container;
     private string $listenerServiceName;
 
+    #[Override]
     public function setUp(): void
     {
         $this->listenerServiceName = 'the_listener_service_name';

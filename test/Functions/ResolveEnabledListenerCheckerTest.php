@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Functions;
 
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,6 +21,7 @@ class ResolveEnabledListenerCheckerTest extends TestCase
 {
     private MockObject&ContainerInterface $container;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->container = $this->createMock(ContainerInterface::class);
@@ -41,6 +43,7 @@ class ResolveEnabledListenerCheckerTest extends TestCase
     public static function provideContainerConfigs(): iterable
     {
         $validChecker = new class implements EnabledListenerCheckerInterface {
+            #[Override]
             public function shouldRegisterListener(string $event, string $listener, bool $isAsync): bool
             {
                 return false;

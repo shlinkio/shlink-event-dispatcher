@@ -6,6 +6,7 @@ namespace Shlinkio\Shlink\EventDispatcher\RoadRunner;
 
 use League\Event\EventDispatcher;
 use League\Event\PrioritizedListenerRegistry;
+use Override;
 use Psr\Container\ContainerInterface;
 use Shlinkio\Shlink\EventDispatcher\Util\RequestIdProviderInterface;
 use Spiral\RoadRunner\Jobs\Jobs;
@@ -28,6 +29,7 @@ class RoadRunnerEventDispatcherFactory
         $requestIdProvider = $container->has(RequestIdProviderInterface::class)
             ? $container->get(RequestIdProviderInterface::class)
             : new class implements RequestIdProviderInterface {
+                #[Override]
                 public function currentRequestId(): string
                 {
                     return '-';

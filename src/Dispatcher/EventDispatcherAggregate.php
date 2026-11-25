@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shlinkio\Shlink\EventDispatcher\Dispatcher;
 
+use Override;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 use function array_keys;
@@ -30,6 +31,7 @@ class EventDispatcherAggregate implements EventDispatcherInterface
         $this->regularEvents = array_keys($regularEvents);
     }
 
+    #[Override]
     public function dispatch(object $event): object
     {
         $initialEventClass = $event::class;

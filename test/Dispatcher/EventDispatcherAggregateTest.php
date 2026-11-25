@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,6 +18,7 @@ class EventDispatcherAggregateTest extends TestCase
     private MockObject&EventDispatcherInterface $asyncDispatcher;
     private MockObject&EventDispatcherInterface $regularDispatcher;
 
+    #[Override]
     public function setUp(): void
     {
         $this->asyncDispatcher = $this->createMock(EventDispatcherInterface::class);

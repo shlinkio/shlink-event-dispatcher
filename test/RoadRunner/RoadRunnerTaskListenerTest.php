@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
 use JsonSerializable;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -25,6 +26,7 @@ class RoadRunnerTaskListenerTest extends TestCase
     private MockObject&JobsInterface $jobs;
     private string $listenerServiceName = 'service';
 
+    #[Override]
     public function setUp(): void
     {
         $this->jobs = $this->createMock(JobsInterface::class);
@@ -32,6 +34,7 @@ class RoadRunnerTaskListenerTest extends TestCase
             $this->jobs,
             $this->listenerServiceName,
             new class implements RequestIdProviderInterface {
+                #[Override]
                 public function currentRequestId(): string
                 {
                     return '-';
@@ -72,6 +75,7 @@ class RoadRunnerTaskListenerTest extends TestCase
         yield [new stdClass(), []];
         yield [
             new class implements JsonSerializable {
+                #[Override]
                 public function jsonSerialize(): array
                 {
                     return [
