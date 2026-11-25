@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
 use League\Event\EventDispatcher;
+use Override;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -22,6 +23,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
     private SyncEventDispatcherFactory $factory;
     private MockObject&ContainerInterface $container;
 
+    #[Override]
     public function setUp(): void
     {
         $this->container = $this->createMock(ContainerInterface::class);
@@ -133,6 +135,7 @@ class SyncEventDispatcherFactoryTest extends TestCase
                 [
                     EnabledListenerCheckerInterface::class,
                     new class implements EnabledListenerCheckerInterface {
+                        #[Override]
                         public function shouldRegisterListener(string $event, string $listener, bool $isAsync): bool
                         {
                             return !$isAsync && $listener === 'foo';

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
 use League\Event\EventDispatcher;
+use Override;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -27,11 +28,13 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
 {
     private RoadRunnerEventDispatcherFactory $factory;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->factory = new RoadRunnerEventDispatcherFactory();
     }
 
+    #[Override]
     protected function tearDown(): void
     {
         putenv('RR_MODE');
@@ -63,6 +66,7 @@ class RoadRunnerEventDispatcherFactoryTest extends TestCase
         putenv('RR_MODE=http');
 
         $container = $this->container(new class implements EnabledListenerCheckerInterface {
+            #[Override]
             public function shouldRegisterListener(string $event, string $listener, bool $isAsync): bool
             {
                 return $isAsync && $listener === 'foo';

@@ -20,7 +20,7 @@
         "shlinkio/shlink-json": "^1.3"
     },
     "require-dev": {
-        "carthage-software/mago": "^1.28",
+        "carthage-software/mago": "~1.61.0",
         "phpunit/phpunit": "^13.0",
         "shlinkio/shlink-mago-config": "^1.1",
         "spiral/roadrunner-jobs": "^4.7",

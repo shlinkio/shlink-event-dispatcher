@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShlinkioTest\Shlink\EventDispatcher\RoadRunner;
 
+use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -26,6 +27,7 @@ class RoadRunnerTaskConsumerToListenerTest extends TestCase
     private MockObject&ContainerInterface $container;
     private MockObject&LoggerInterface $logger;
 
+    #[Override]
     public function setUp(): void
     {
         $this->consumer = $this->createMock(ConsumerInterface::class);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShlinkioTest\Shlink\EventDispatcher\Dispatcher;
 
 use League\Event\EventDispatcher;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,6 +22,7 @@ class EventDispatcherAggregateFactoryTest extends TestCase
     private EventDispatcherInterface $ed;
     private MockObject&ContainerInterface $container;
 
+    #[Override]
     public function setUp(): void
     {
         $this->factory = new EventDispatcherAggregateFactory();
